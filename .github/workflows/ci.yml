@@ -1,0 +1,46 @@
+name: Do the thing in CI
+
+on:
+  push:
+    branches: ['master']
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  run-all:
+    runs-on: ubuntu-latest
+    steps:
+      # clone
+      - name: Checkout
+        uses: actions/checkout@v3
+      # cache
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            ~/.cargo/.crates.toml
+            ~/.cargo/.crates2.json
+            target/
+          key: ${{ runner.os }}-cargo
+      - uses: actions/cache@v3
+        with:
+          path: scripts/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+      # install dependencies
+      - uses: extractions/setup-just@v1
+      - uses: oven-sh/setup-bun@v1
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: "~1"
+      - run: just setup
+      # do the thing
+      - run: just count
+      # report
+      - uses: actions/upload-artifact@v3
+        with:
+          name: results
+          path: results

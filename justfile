@@ -6,29 +6,50 @@ _default:
   just -l
 
 setup:
+  #!/usr/bin/env bash
+  set -euxo pipefail
+  if [ ! -z "${CI:-}" ]; then
+    sudo apt-get install build-essential cargo clang curl jq moreutils nodejs rustc
+    cargo install timers
+    cargo install hyperfine
+    cargo install ripgrep --features 'pcre2'
+  fi
   cd scripts && npm install
 
 prepare:
   rm -rf {{r}} {{b}}
   mkdir {{r}} {{b}}
 
-node:
-  {{t}} node ./count.js 2> {{r}}/node.yml
-  {{t}} deno run --allow-all ./count.js 2> {{r}}/deno.yml
-  {{t}} bun run ./count.js 2> {{r}}/bun.yml
-
-python:
-  {{t}} python3 ./count.py 2> {{r}}/python.yml
-
-c:
-  gcc -O3 ./count.c -o {{b}}/c-gcc
-  {{t}} {{b}}/c-gcc 2> {{r}}/gcc.yml
+build: prepare
+  gcc   -O3 ./count.c -o {{b}}/c-gcc
   clang -O3 ./count.c -o {{b}}/c-clang
-  {{t}} {{b}}/c-clang 2> {{r}}/clang.yml
-
-rust:
   rustc -C opt-level=3 ./count.rs -o {{b}}/rust
-  {{t}} {{b}}/rust 2> {{r}}/rust.yml
+  echo "#!/usr/bin/env -S python3  \n$(cat count.py)" > {{b}}/python3
+  echo "#!/usr/bin/env -S node     \n$(cat count.js)" > {{b}}/node
+  echo "#!/usr/bin/env -S deno run \n$(cat count.js)" > {{b}}/deno
+  echo "#!/usr/bin/env -S bun      \n$(cat count.js)" > {{b}}/bun
+  for f in {{b}}/*; do chmod +x "$f"; done
 
-all: prepare node python c rust
-  node ./scripts/summary.js
+run: build
+  #!/usr/bin/env bash
+  set -euxo pipefail
+  for f in {{b}}/*; do
+    sleep 5
+
+    name="$(basename $f)"
+    out="{{r}}/${name}.json"
+
+    if [[ "$name" == *"python"* ]]; then
+      args="--runs 2"
+    else
+      args="--warmup 3"
+    fi
+    hyperfine $args --shell=none --export-json "$out" "$f"
+
+    jq '.results[0] | del(.exit_codes)' "$out" | sponge "$out"
+    timers "$f" >/dev/null 2> >(jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1')'}' "$out" | sponge "$out")
+  done
+
+count: run
+  node ./scripts/summary.js > {{r}}/table.txt
+  cat {{r}}/table.txt
