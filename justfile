@@ -5,6 +5,9 @@ b := "build"
 _default:
   just -l
 
+setup:
+  cd scripts && npm install
+
 prepare:
   rm -rf {{r}} {{b}}
   mkdir {{r}} {{b}}
