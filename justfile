@@ -26,6 +26,7 @@ build: prepare
   rustc -C opt-level=3 ./count.rs -o {{b}}/rust
   javac count.java
   echo "#!/usr/bin/env -S java count" > {{b}}/java
+  echo "#!/usr/bin/env -S ruby     \n$(cat count.rb)" > {{b}}/ruby
   echo "#!/usr/bin/env -S python3  \n$(cat count.py)" > {{b}}/python3
   echo "#!/usr/bin/env -S node     \n$(cat count.js)" > {{b}}/node
   echo "#!/usr/bin/env -S deno run \n$(cat count.js)" > {{b}}/deno
@@ -41,11 +42,14 @@ run: build
     name="$(basename $f)"
     out="{{r}}/${name}.json"
 
-    if [[ "$name" == *"python"* ]]; then
-      args="--runs 2"
-    else
+    case "$name" in
+      *"python"*|*"ruby"*)
+        args="--runs 2"
+        ;;
+      *)
       args="--warmup 3"
-    fi
+      ;;
+    esac
     hyperfine $args --shell=none --export-json "$out" "$f"
 
     jq '.results[0] | del(.exit_codes)' "$out" | sponge "$out"
