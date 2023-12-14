@@ -24,6 +24,8 @@ build: prepare
   gcc   -O3 ./count.c -o {{b}}/c-gcc
   clang -O3 ./count.c -o {{b}}/c-clang
   rustc -C opt-level=3 ./count.rs -o {{b}}/rust
+  javac count.java
+  echo "#!/usr/bin/env -S java count" > {{b}}/java
   echo "#!/usr/bin/env -S python3  \n$(cat count.py)" > {{b}}/python3
   echo "#!/usr/bin/env -S node     \n$(cat count.js)" > {{b}}/node
   echo "#!/usr/bin/env -S deno run \n$(cat count.js)" > {{b}}/deno
