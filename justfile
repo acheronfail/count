@@ -9,7 +9,7 @@ setup:
   #!/usr/bin/env bash
   set -euxo pipefail
   if [ ! -z "${CI:-}" ]; then
-    sudo apt-get install build-essential cargo clang curl jq moreutils nodejs rustc
+    sudo apt-get install build-essential bash cargo clang curl jq moreutils nodejs rustc zsh
     cargo install timers
     cargo install hyperfine
     cargo install ripgrep --features 'pcre2'
@@ -31,6 +31,9 @@ build: prepare
   echo "#!/usr/bin/env -S node     \n$(cat count.js)" > {{b}}/node
   echo "#!/usr/bin/env -S deno run \n$(cat count.js)" > {{b}}/deno
   echo "#!/usr/bin/env -S bun      \n$(cat count.js)" > {{b}}/bun
+  echo "#!/usr/bin/env -S sh       \n$(cat count.sh)" > {{b}}/sh
+  echo "#!/usr/bin/env -S zsh      \n$(cat count.sh)" > {{b}}/zsh
+  echo "#!/usr/bin/env -S bash     \n$(cat count.sh)" > {{b}}/bash
   for f in {{b}}/*; do chmod +x "$f"; done
 
 run: build
@@ -43,8 +46,12 @@ run: build
     out="{{r}}/${name}.json"
 
     case "$name" in
-      *"python"*|*"ruby"*)
-        args="--runs 2"
+      *"python"*|\
+      *"ruby"*|\
+      *"bash"*|\
+      *"zsh"*|\
+      *"sh"*)
+        args="--runs 1"
         ;;
       *)
       args="--warmup 3"
