@@ -9,7 +9,7 @@ setup:
   #!/usr/bin/env bash
   set -euxo pipefail
   if [ ! -z "${CI:-}" ]; then
-    sudo apt-get install build-essential cargo clang curl jq moreutils nodejs rustc
+    sudo apt-get install build-essential cargo clang curl gfortran jq moreutils nodejs rustc
     cargo install timers
     cargo install hyperfine
     cargo install ripgrep --features 'pcre2'
@@ -24,6 +24,7 @@ build: prepare
   gcc   -O3 ./count.c -o {{b}}/c-gcc
   clang -O3 ./count.c -o {{b}}/c-clang
   rustc -C opt-level=3 ./count.rs -o {{b}}/rust
+  gfortran -O3 ./count.f90 -o {{b}}/fortran
   javac count.java
   echo "#!/usr/bin/env -S java count" > {{b}}/java
   echo "#!/usr/bin/env -S ruby     \n$(cat count.rb)" > {{b}}/ruby
