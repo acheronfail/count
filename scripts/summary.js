@@ -3,8 +3,12 @@ import { readdirSync } from 'fs';
 import { join } from 'path';
 import formatTime from 'pretty-time';
 import formatSize from 'pretty-bytes';
+import minimist from 'minimist';
 
-const resultsDir = './results';
+const args = minimist(process.argv.slice(2));
+const resultsDir = args.results;
+if (!resultsDir) throw new Error('Please pass --results');
+
 const results = await Promise.all(
   readdirSync(resultsDir)
     .filter((name) => name.endsWith('.json'))

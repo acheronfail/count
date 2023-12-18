@@ -1,7 +1,3 @@
-t := "timers --time=nano"
-r := "results"
-b := "build"
-
 _default:
   just -l
 
@@ -16,54 +12,78 @@ setup:
   fi
   cd scripts && npm install
 
-prepare:
-  rm -rf {{r}} {{b}}
-  mkdir {{r}} {{b}}
+build what:
+  just build-{{what}}
 
-build: prepare
-  gcc      -O3 ./count.c -o {{b}}/c-gcc
-  clang    -O3 ./count.c -o {{b}}/c-clang
-  rustc    -C opt-level=3 ./count.rs -o {{b}}/rust
-  gfortran -O3 ./count.f90 -o {{b}}/fortran
-  javac count.java -d java
-  mkdir -p scala && scalac count.scala -d scala
-  kotlinc count.kt -include-runtime -d kotlin/kotlin.jar
-  echo "#!/usr/bin/env -S scala -classpath scala Count" > {{b}}/scala
-  echo "#!/usr/bin/env -S java -jar kotlin/kotlin.jar " > {{b}}/kotlin
-  echo "#!/usr/bin/env -S java -cp java count         " > {{b}}/java
-  echo "#!/usr/bin/env -S ruby       \n$(cat count.rb)" > {{b}}/ruby
-  echo "#!/usr/bin/env -S python3    \n$(cat count.py)" > {{b}}/python3
-  echo "#!/usr/bin/env -S node       \n$(cat count.js)" > {{b}}/node
-  echo "#!/usr/bin/env -S deno run   \n$(cat count.js)" > {{b}}/deno
-  echo "#!/usr/bin/env -S bun        \n$(cat count.js)" > {{b}}/bun
-  for f in {{b}}/*; do chmod +x "$f"; done
+run what:
+  just build {{what}}
+  @$(cat CMD)
 
-run what: build
-  {{b}}/{{what}}
-
-all: build
+measure what:
   #!/usr/bin/env bash
   set -euxo pipefail
-  for f in {{b}}/*; do
-    sleep 5
 
-    name="$(basename $f)"
-    out="{{r}}/${name}.json"
+  just build {{what}}
 
-    case "$name" in
-      *"python"*|*"ruby"*)
-        args="--runs 2"
-        ;;
-      *)
+  case "{{what}}" in
+    *"python"*|*"ruby"*)
+      args="--runs 1"
+      ;;
+    *)
       args="--warmup 3"
       ;;
-    esac
-    hyperfine $args --shell=none --export-json "$out" "$f"
+  esac
 
-    jq '.results[0] | del(.exit_codes)' "$out" | sponge "$out"
-    timers "$f" >/dev/null 2> >(jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1')'}' "$out" | sponge "$out")
-  done
+  out="{{what}}.json"
 
-count: all
-  node ./scripts/summary.js > {{r}}/table.txt
-  cat {{r}}/table.txt
+  hyperfine $args --shell=none --export-json "$out" "$(cat CMD)"
+  jq '.results[0] | del(.exit_codes)' "$out" | sponge "$out"
+  timers $(cat CMD) >/dev/null 2> >(jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1')'}' "$out" | sponge "$out")
+
+summary results:
+  cd scripts && node ./summary.js --results ..
+
+# languages
+
+build-gcc:
+  gcc -O3 ./count.c
+  echo './a.out' > CMD
+
+build-clang:
+  clang -O3 ./count.c
+  echo './a.out' > CMD
+
+build-rust:
+  rustc -C opt-level=3 ./count.rs
+  echo './count' > CMD
+
+build-fortran:
+  gfortran -O3 ./count.f90
+  echo './a.out' > CMD
+
+build-java:
+  javac count.java
+  echo 'java count' > CMD
+
+build-scala:
+  scalac count.scala
+  echo 'scala count' > CMD
+
+build-kotlin:
+  kotlinc count.kt -include-runtime -d count.jar
+  echo 'java -jar count.jar' > CMD
+
+build-ruby:
+  echo 'ruby count.rb' > CMD
+
+build-python3:
+  echo 'python3 count.py' > CMD
+
+build-node:
+  echo 'node count.js' > CMD
+
+build-deno:
+  echo 'deno run count.js' > CMD
+
+build-bun:
+  echo 'bun run count.js' > CMD

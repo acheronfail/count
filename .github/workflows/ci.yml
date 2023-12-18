@@ -8,13 +8,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-all:
+  run:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        build:
+        - bun
+        - clang
+        - deno
+        - fortran
+        - gcc
+        - java
+        - kotlin
+        - node
+        - python3
+        - ruby
+        - rust
+        - scala
     steps:
-      # clone
       - name: Checkout
         uses: actions/checkout@v3
-      # cache
       - uses: actions/cache@v3
         with:
           path: |
@@ -38,9 +51,28 @@ jobs:
           deno-version: "~1"
       - run: just setup
       # do the thing
-      - run: just count
+      - run: just measure ${{ matrix.build }}
       # report
       - uses: actions/upload-artifact@v3
         with:
-          name: results
-          path: results
+          path: "${{ matrix.build }}.json"
+
+  report:
+    needs: ['run']
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download Results
+        uses: actions/download-artifact@v2
+        with:
+          path: .
+      - run: sudo apt-get install nodejs
+      - run: |
+          cd scripts
+          npm install
+          node ./summary.js --results ../artifact > summary.txt
+          cat summary.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          path: scripts/summary.txt

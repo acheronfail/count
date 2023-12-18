@@ -1,7 +1,7 @@
-object Count {
+object count {
     def main(args: Array[String]) = {
         var num = 0
-        while (num < 1_000_000_000) {
+        while (num < 1000000000) {
           num += 1
         }
 

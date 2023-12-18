@@ -2,10 +2,12 @@
   "type": "module",
   "dependencies": {
     "human-readable": "^0.2.1",
+    "minimist": "^1.2.8",
     "pretty-bytes": "^6.1.1",
     "pretty-time": "^1.1.0"
   },
   "devDependencies": {
+    "@types/minimist": "^1.2.5",
     "@types/node": "^20.10.4"
   }
 }

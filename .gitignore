@@ -1,6 +1,8 @@
 build
 results
 *.class
+*.json
 java/
 kotlin/
 scala/
+CMD
