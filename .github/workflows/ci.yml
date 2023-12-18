@@ -25,6 +25,7 @@ jobs:
         - ruby
         - rust
         - scala
+        - zig
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -49,7 +50,20 @@ jobs:
       - uses: denoland/setup-deno@v1
         with:
           deno-version: "~1"
-      - run: just setup
+      - run: |
+          sudo apt install -y build-essential cargo clang curl gfortran jq kotlin moreutils nodejs rustc scala tar wget xz-utils
+          cargo install timers
+          cargo install hyperfine
+          cargo install ripgrep --features 'pcre2'
+
+          mkdir -p /opt/zig && cd $_
+          wget --quiet -O zig.tar.xz $(curl --silent https://ziglang.org/download/index.json | jq -r '.[keys_unsorted[1]]["x86_64-linux"].tarball')
+          tar -xvf zig.tar.xz 2>&1 >/dev/null
+          zig_path="$PWD/$(tar -tf zig.tar.xz | head -n1)"
+          echo "$zig_path" >> $GITHUB_PATH
+          export PATH="$PATH:$zig_path"
+          cd -
+
       # do the thing
       - run: just measure ${{ matrix.build }}
       # report
@@ -64,7 +78,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download Results
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: .
       - run: sudo apt-get install nodejs

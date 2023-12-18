@@ -1,15 +1,10 @@
 _default:
   just -l
 
-setup:
-  #!/usr/bin/env bash
-  set -euxo pipefail
-  if [ ! -z "${CI:-}" ]; then
-    sudo apt-get install build-essential cargo clang curl gfortran jq kotlin moreutils nodejs rustc scala
-    cargo install timers
-    cargo install hyperfine
-    cargo install ripgrep --features 'pcre2'
-  fi
+@_check +CMDS:
+    echo {{CMDS}} | xargs -n1 sh -c 'if ! command -v $1 >/dev/null 2>&1 /dev/null; then echo "$1 is required!"; exit 1; fi' bash
+
+setup: (_check "npm")
   cd scripts && npm install
 
 build what:
@@ -45,45 +40,49 @@ summary results:
 
 # languages
 
-build-gcc:
+build-gcc: (_check "gcc")
   gcc -O3 ./count.c
   echo './a.out' > CMD
 
-build-clang:
+build-clang: (_check "clang")
   clang -O3 ./count.c
   echo './a.out' > CMD
 
-build-rust:
+build-rust: (_check "rustc")
   rustc -C opt-level=3 ./count.rs
   echo './count' > CMD
 
-build-fortran:
+build-fortran: (_check "gfortran")
   gfortran -O3 ./count.f90
   echo './a.out' > CMD
 
-build-java:
+build-java: (_check "javac java")
   javac count.java
   echo 'java count' > CMD
 
-build-scala:
+build-scala: (_check "scalac scala")
   scalac count.scala
   echo 'scala count' > CMD
 
-build-kotlin:
+build-kotlin: (_check "kotlinc java")
   kotlinc count.kt -include-runtime -d count.jar
   echo 'java -jar count.jar' > CMD
 
-build-ruby:
+build-ruby: (_check "ruby")
   echo 'ruby count.rb' > CMD
 
-build-python3:
+build-python3: (_check "python3")
   echo 'python3 count.py' > CMD
 
-build-node:
+build-node: (_check "node")
   echo 'node count.js' > CMD
 
-build-deno:
+build-deno: (_check "deno")
   echo 'deno run count.js' > CMD
 
-build-bun:
+build-bun: (_check "bun")
   echo 'bun run count.js' > CMD
+
+build-zig: (_check "zig")
+  zig build-exe -O ReleaseFast ./count.zig
+  echo './count' > CMD

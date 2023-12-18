@@ -2,6 +2,7 @@ build
 results
 *.class
 *.json
+*.o
 java/
 kotlin/
 scala/
