@@ -63,8 +63,6 @@ jobs:
           deno-version: "~1"
       - name: Install dependencies
         run: |
-          curl -fsSL https://crystal-lang.org/install.sh | sudo bash
-
           sudo apt-get update
           sudo apt-get install -y build-essential cargo clang coffeescript curl erlang gfortran gnucobol4 haskell-platform jq kotlin moreutils nasm nodejs php rustc scala tar wget xz-utils
           cargo install timers
@@ -73,6 +71,8 @@ jobs:
           cargo install juliaup
 
           juliaup add release
+
+          curl -fsSL https://crystal-lang.org/install.sh | sudo bash
 
           mkdir -p /opt/zig && cd $_
           wget --quiet -O zig.tar.xz $(curl --silent https://ziglang.org/download/index.json | jq -r '.[keys_unsorted[1]]["x86_64-linux"].tarball')
