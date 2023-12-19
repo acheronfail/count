@@ -3,7 +3,7 @@ import Data.Bits
 
 count :: Int -> Int -> IO ()
 count target n
-    | n == target = print n
+    | n >= target = print n
     | otherwise   = count target ((n + 1) .|. 1)
 
 main :: IO ()
