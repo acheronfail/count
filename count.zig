@@ -8,7 +8,7 @@ pub fn main() !void {
     var target = try std.fmt.parseInt(u32, args[1], 10);
     var i: u32 = 0;
 
-    while (i < target) : (i = (i + 1) % 2000000000) {}
+    while (i < target) : (i = (i + 1) | 1) {}
 
     std.debug.print("{}\n", .{i});
 }

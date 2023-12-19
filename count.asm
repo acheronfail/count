@@ -23,15 +23,11 @@ parse_arg:
     cmp byte [rdi + rcx], 0
     jne parse_arg
 
-    mov ecx, eax
-    xor eax, eax
-    mov ebx, 2000000000
+    xor ecx, ecx
 count:
-    mov eax, edx
-    inc eax
-    xor edx, edx
-    div ebx
-    cmp edx, ecx
+    inc ecx
+    or ecx, 1
+    cmp ecx, eax
     jl count
 
     ; print
