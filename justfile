@@ -107,3 +107,8 @@ build-erlang: (_check "erlc erl")
 
 build-crystal: (_check "crystal")
   echo 'crystal run ./count.cr' > CMD
+
+build-assembly: (_check "nasm")
+  nasm -f elf64 count.asm
+  ld count.o -o count -lc -I/lib64/ld-linux-x86-64.so.2
+  echo './count' > CMD

@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         build:
+        - assembly
         - bun
         - clang
         - crystal
@@ -61,7 +62,7 @@ jobs:
           curl -fsSL https://crystal-lang.org/install.sh | sudo bash
 
           sudo apt-get update
-          sudo apt-get install -y build-essential cargo clang curl erlang gfortran haskell-platform jq kotlin moreutils nodejs php rustc scala tar wget xz-utils
+          sudo apt-get install -y build-essential cargo clang curl erlang gfortran haskell-platform jq kotlin moreutils nasm nodejs php rustc scala tar wget xz-utils
           cargo install timers
           cargo install hyperfine
           cargo install ripgrep --features 'pcre2'
