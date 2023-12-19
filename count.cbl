@@ -12,7 +12,7 @@ PROCEDURE DIVISION.
 ACCEPT target FROM COMMAND-LINE
 PERFORM UNTIL i = target
     ADD 1 TO i
-    COMPUTE i = FUNCTION BINARY-OR(i, 1)
+    ADD 1 TO i *> should be bitwise or 1 but no bit-or in cobol :/
 END-PERFORM.
 DISPLAY i
 STOP RUN.

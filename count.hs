@@ -1,4 +1,5 @@
 import System.Environment
+import Data.Bits
 
 count :: Int -> Int -> IO ()
 count target n
