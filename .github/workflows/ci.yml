@@ -93,7 +93,8 @@ jobs:
         with:
           path: .
       - run: sudo apt-get install nodejs
-      - run: |
+      - name: Generate Summary
+        run: |
           cd scripts
           npm install
           node ./summary.js --results ../artifact > summary.txt
