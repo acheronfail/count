@@ -118,3 +118,6 @@ build-assembly: (_check "nasm")
 build-cobol: (_check "cobc")
   cobc -O3 -free -x -o count count.cbl
   echo './count {{i}}' > CMD
+
+build-julia: (_check "julia")
+  echo 'julia ./count.jl' > CMD

@@ -26,6 +26,7 @@ jobs:
           - go
           - haskell
           - java
+          - julia
           - kotlin
           - node
           - perl
@@ -68,6 +69,9 @@ jobs:
           cargo install timers
           cargo install hyperfine
           cargo install ripgrep --features 'pcre2'
+          cargo install juliaup
+
+          juliaup add release
 
           mkdir -p /opt/zig && cd $_
           wget --quiet -O zig.tar.xz $(curl --silent https://ziglang.org/download/index.json | jq -r '.[keys_unsorted[1]]["x86_64-linux"].tarball')
