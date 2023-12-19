@@ -23,7 +23,7 @@ measure what:
   just build {{what}}
 
   case "{{what}}" in
-    ( *"python"* | *"ruby"* | *"perl"* | *"haskell"* | *"php"* )
+    ( *"python"* | *"ruby"* | *"perl"* | *"haskell"* | *"php"* | *"cobol"* )
       args="--runs 1"
       ;;
     (*)
@@ -113,4 +113,8 @@ build-crystal: (_check "crystal")
 build-assembly: (_check "nasm")
   nasm -f elf64 count.asm
   ld count.o -o count -lc -I/lib64/ld-linux-x86-64.so.2
+  echo './count {{i}}' > CMD
+
+build-cobol: (_check "cobc")
+  cobc -O3 -free -x -o count count.cbl
   echo './count {{i}}' > CMD
