@@ -6,6 +6,6 @@ start() ->
 
 loop(N) when N < 1000000000 ->
     loop(N+1);
-loop(_) ->
+loop(N) ->
     io:fwrite("~B~n", [N]),
     ok.

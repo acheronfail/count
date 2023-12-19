@@ -21,10 +21,10 @@ measure what:
   just build {{what}}
 
   case "{{what}}" in
-    *"python"*|*"ruby"*)
+    ( *"python"* | *"ruby"* | *"perl"* | *"haskell"* | *"php"* )
       args="--runs 1"
       ;;
-    *)
+    (*)
       args="--warmup 3"
       ;;
   esac
@@ -104,3 +104,6 @@ build-php: (_check "php")
 build-erlang: (_check "erlc erl")
   erlc count.erl
   echo 'erl -noshell -s count start -s init stop' > CMD
+
+build-crystal: (_check "crystal")
+  echo 'crystal run ./count.cr' > CMD
