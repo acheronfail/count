@@ -1,5 +1,6 @@
 i = 0
-while i < 1_000_000_000
+target = ARGV[0].to_i.not_nil!
+while i < target
   i += 1
 end
 

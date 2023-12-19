@@ -1,6 +1,7 @@
 <?php
 $i = 0;
-while ($i < 1000000000) {
+$target = (int) $argv[1];
+while ($i < $target) {
   $i++;
 }
 echo $i . "\n";

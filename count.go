@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 )
 
 func main() {
 	i := 0
-	for i < 1000000000 {
+	target, _ := strconv.Atoi(os.Args[1])
+	for i < target {
 		i++
 	}
 	fmt.Println(i)

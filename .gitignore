@@ -1,5 +1,8 @@
 build
 results
+*.out
+*.dump
+*.beam
 *.class
 *.json
 *.o

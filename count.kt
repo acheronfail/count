@@ -1,8 +1,9 @@
-fun main() {
-    var i = 0
-    while (i < 1_000_000_000) {
-      i++;
-    }
+fun main(args: Array<String>) {
+  var i = 0
+  val target = args[0].toInt()
+  while (i < target) {
+    i++
+  }
 
-    println(i)
+  println(i)
 }

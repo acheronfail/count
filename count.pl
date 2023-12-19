@@ -1,3 +1,4 @@
 my $i = 0;
-for ($i = 0; $i < 1000000000; $i++) {}
+my $limit = $ARGV[0] + 0;
+for ($i = 0; $i < $limit; $i++) {}
 print "$i\n";

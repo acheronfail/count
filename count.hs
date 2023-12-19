@@ -1,7 +1,12 @@
-count :: Int -> IO ()
-count 1000000000 = print 1000000000
-count n = do
-  count (n + 1)
+import System.Environment
+
+count :: Int -> Int -> IO ()
+count target n
+    | n == target = print n
+    | otherwise   = count target (n + 1)
 
 main :: IO ()
-main = count 0
+main = do
+    [arg] <- getArgs
+    let target = read arg
+    count target 0

@@ -1,5 +1,8 @@
+import sys
+
 i = 0
-while i < 1000000000:
+target = int(sys.argv[1])
+while i < target:
   i += 1
 
 print(i)
