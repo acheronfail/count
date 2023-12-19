@@ -100,3 +100,7 @@ build-go: (_check "go")
 
 build-php: (_check "php")
   echo 'php ./count.php' > CMD
+
+build-erlang: (_check "erlc erl")
+  erlc count.erl
+  echo 'erl -noshell -s count start -s init stop' > CMD
