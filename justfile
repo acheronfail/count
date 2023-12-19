@@ -93,3 +93,7 @@ build-perl: (_check "perl")
 build-haskell: (_check "ghc")
   ghc count.hs
   echo './count' > CMD
+
+build-go: (_check "go")
+  go build -o count count.go
+  echo './count' > CMD

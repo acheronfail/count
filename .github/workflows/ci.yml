@@ -18,6 +18,7 @@ jobs:
         - deno
         - fortran
         - gcc
+        - go
         - haskell
         - java
         - kotlin
