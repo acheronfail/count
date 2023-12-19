@@ -21,6 +21,7 @@ jobs:
         - java
         - kotlin
         - node
+        - perl
         - python3
         - ruby
         - rust

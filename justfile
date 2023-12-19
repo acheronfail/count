@@ -86,3 +86,6 @@ build-bun: (_check "bun")
 build-zig: (_check "zig")
   zig build-exe -O ReleaseFast ./count.zig
   echo './count' > CMD
+
+build-perl: (_check "perl")
+  echo 'perl ./count.pl' > CMD
