@@ -18,6 +18,7 @@ jobs:
         - deno
         - fortran
         - gcc
+        - haskell
         - java
         - kotlin
         - node
@@ -52,7 +53,7 @@ jobs:
         with:
           deno-version: "~1"
       - run: |
-          sudo apt install -y build-essential cargo clang curl gfortran jq kotlin moreutils nodejs rustc scala tar wget xz-utils
+          sudo apt install -y build-essential cargo clang curl gfortran haskell-platform jq kotlin moreutils nodejs rustc scala tar wget xz-utils
           cargo install timers
           cargo install hyperfine
           cargo install ripgrep --features 'pcre2'

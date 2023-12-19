@@ -3,6 +3,8 @@ results
 *.class
 *.json
 *.o
+*.hi
+count
 java/
 kotlin/
 scala/

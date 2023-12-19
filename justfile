@@ -89,3 +89,7 @@ build-zig: (_check "zig")
 
 build-perl: (_check "perl")
   echo 'perl ./count.pl' > CMD
+
+build-haskell: (_check "ghc")
+  ghc count.hs
+  echo './count' > CMD
