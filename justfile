@@ -121,3 +121,6 @@ build-cobol: (_check "cobc")
 
 build-julia: (_check "julia")
   echo 'julia ./count.jl' > CMD
+
+build-coffeescript: (_check "coffee")
+  echo 'coffee ./count.coffee {{i}}' > CMD
