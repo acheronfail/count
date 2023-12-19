@@ -97,3 +97,6 @@ build-haskell: (_check "ghc")
 build-go: (_check "go")
   go build -o count count.go
   echo './count' > CMD
+
+build-php: (_check "php")
+  echo 'php ./count.php' > CMD
