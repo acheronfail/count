@@ -6,7 +6,7 @@ start(Input) ->
     count(0, Target).
 
 count(N, T) when N < T ->
-    count(N+1, T);
+    count((N+1) % 2000000000, T);
 count(N, _) ->
     io:fwrite("~B~n", [N]),
     init:stop(0).

@@ -3,7 +3,7 @@ object count {
         var num = 0
         val target = args(0).toInt
         while (num < target) {
-          num += 1
+          num = (num + 1) % 2000000000
         }
 
         println(num)

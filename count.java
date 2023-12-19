@@ -3,7 +3,7 @@ public class count {
     int i = 0;
     int target = Integer.parseInt(args[0]);
     while (i < target) {
-        i += 1;
+        i = (i + 1) % 2000000000;
     }
 
     System.out.println(i);

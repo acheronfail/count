@@ -4,7 +4,7 @@ fn main() {
     let mut i = 0;
     let target = env::args().nth(1).unwrap().parse::<i32>().unwrap();
     while i < target {
-        i += 1;
+        i = (i + 1) % 2000000000;
     }
 
     println!("{}", i);

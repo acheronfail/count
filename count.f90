@@ -7,7 +7,7 @@ program count
 
   i = 0
   do while (i < target)
-    i = i + 1;
+    i = (i + 1) % 2000000000;
   end do
 
   print *, i

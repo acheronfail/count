@@ -10,7 +10,7 @@ func main() {
 	i := 0
 	target, _ := strconv.Atoi(os.Args[1])
 	for i < target {
-		i++
+		i = (i + 1) % 2000000000
 	}
 	fmt.Println(i)
 }
