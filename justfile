@@ -23,7 +23,7 @@ measure what:
   just build {{what}}
 
   case "{{what}}" in
-    ( *"python"* | *"ruby"* | *"perl"* | *"haskell"* | *"php"* | *"cobol"* )
+    ( *"python"* | *"ruby"* | *"perl"* | *"haskell"* | *"php"* | *"cobol"* | *"julia"* )
       args="--runs 1"
       ;;
     (*)
