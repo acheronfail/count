@@ -128,3 +128,7 @@ build-coffeescript: (_check "coffee")
 build-nim: (_check "nim")
   nim compile --opt:speed ./count.nim
   echo './count {{i}}' > CMD
+
+build-prolog: (_check "swipl")
+  swipl -s count.pro -g "main" -t halt -- {{i}}
+  echo './count {{i}}' > CMD
