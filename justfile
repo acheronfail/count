@@ -124,3 +124,7 @@ build-julia: (_check "julia")
 
 build-coffeescript: (_check "coffee")
   echo 'coffee ./count.coffee {{i}}' > CMD
+
+build-nim: (_check "nim")
+  nim compile --opt:speed ./count.nim
+  echo './count {{i}}' > CMD

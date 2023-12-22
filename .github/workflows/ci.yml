@@ -29,6 +29,7 @@ jobs:
           - java
           - julia
           - kotlin
+          - nim
           - node
           - perl
           - php
@@ -71,6 +72,11 @@ jobs:
           cargo install juliaup
 
           juliaup add release
+
+          wget -qO choosenim.sh https://nim-lang.org/choosenim/init.sh
+          bash ./choosenim.sh -y
+          echo "$HOME/.nimble/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.nimble/bin:$PATH"
 
           curl -fsSL https://crystal-lang.org/install.sh | sudo bash
 
