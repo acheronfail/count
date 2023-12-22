@@ -1,9 +1,9 @@
 # install dependencies
-export DEBIAN_FRONTEND=noninteractive
 sudo apt-get update
-sudo apt-get install -y build-essential cargo clang coffeescript curl erlang gfortran \
-                        gnucobol4 gnu-smalltalk haskell-platform jq kotlin moreutils nasm \
-                        nodejs php rustc scala swi-prolog tar tcl wget xz-utils
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    build-essential cargo clang coffeescript curl erlang gfortran gnucobol4 \
+    gnu-smalltalk haskell-platform jq kotlin moreutils nasm nodejs php rustc \
+    scala swi-prolog tar tcl wget xz-utils
 
 # required tools for running our benchmarks
 cargo install timers
