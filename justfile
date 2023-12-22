@@ -23,7 +23,18 @@ measure what:
   just build {{what}}
 
   case "{{what}}" in
-    ( *"python"* | *"ruby"* | *"perl"* | *"haskell"* | *"php"* | *"cobol"* | *"julia"* )
+    (
+        *"cobol"*
+      | *"haskell"*
+      | *"julia"*
+      | *"perl"*
+      | *"php"*
+      | *"prolog"*
+      | *"python"*
+      | *"ruby"*
+      | *"smalltalk"*
+      | *"tcl"*
+    )
       args="--runs 1"
       ;;
     (*)
@@ -130,7 +141,7 @@ build-nim: (_check "nim")
   echo './count {{i}}' > CMD
 
 build-prolog: (_check "swipl")
-  swipl -s count.pro -g "main" -t halt -- {{i}}
+  swipl -s count.pro -g "main" -t halt -- 1
   echo './count {{i}}' > CMD
 
 build-smalltalk: (_check "gst")
