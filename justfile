@@ -132,3 +132,6 @@ build-nim: (_check "nim")
 build-prolog: (_check "swipl")
   swipl -s count.pro -g "main" -t halt -- {{i}}
   echo './count {{i}}' > CMD
+
+build-smalltalk: (_check)
+  echo 'gst -f count.st {{i}}' > CMD
