@@ -22,25 +22,26 @@ measure what:
 
   just build {{what}}
 
-  case "{{what}}" in
-    (
-        *"cobol"*
-      | *"haskell"*
-      | *"julia"*
-      | *"perl"*
-      | *"php"*
-      | *"prolog"*
-      | *"python"*
-      | *"ruby"*
-      | *"smalltalk"*
-      | *"tcl"*
-    )
-      args="--runs 1"
-      ;;
-    (*)
-      args="--warmup 3"
-      ;;
-  esac
+  slow_langs=(
+    cobol
+    haskell
+    julia
+    perl
+    php
+    prolog
+    python
+    ruby
+    smalltalk
+    tcl
+  )
+
+  args="--warmup 3"
+  for language in "${slow_langs[@]}"; do
+      if [[ "{{what}}" == *"$language"* ]]; then
+          args="--runs 1"
+          break
+      fi
+  done
 
   out="{{what}}.json"
 
