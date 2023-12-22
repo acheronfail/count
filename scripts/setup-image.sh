@@ -1,4 +1,5 @@
 # install dependencies
+export DEBIAN_FRONTEND=noninteractive
 sudo apt-get update
 sudo apt-get install -y build-essential cargo clang coffeescript curl erlang gfortran \
                         gnucobol4 gnu-smalltalk haskell-platform jq kotlin moreutils nasm \
