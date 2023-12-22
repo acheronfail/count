@@ -142,7 +142,7 @@ build-nim: (_check "nim")
   echo './count {{i}}' > CMD
 
 build-prolog: (_check "swipl")
-  swipl -s count.pro -g "main" -t halt -- 1
+  swipl -s count.pro -g "main" -t halt -- 10
   echo './count {{i}}' > CMD
 
 build-smalltalk: (_check "gst")
