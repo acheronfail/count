@@ -39,6 +39,7 @@ jobs:
           - rust
           - scala
           - smalltalk
+          - tcl
           - zig
     steps:
       - name: Checkout
@@ -69,7 +70,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential cargo clang coffeescript curl erlang gfortran \
                                   gnucobol4 gnu-smalltalk haskell-platform jq kotlin moreutils nasm \
-                                  nodejs php rustc scala swi-prolog tar wget xz-utils
+                                  nodejs php rustc scala swi-prolog tar tcl wget xz-utils
           cargo install timers
           cargo install hyperfine
           cargo install ripgrep --features 'pcre2'

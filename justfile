@@ -133,5 +133,8 @@ build-prolog: (_check "swipl")
   swipl -s count.pro -g "main" -t halt -- {{i}}
   echo './count {{i}}' > CMD
 
-build-smalltalk: (_check)
+build-smalltalk: (_check "gst")
   echo 'gst -f count.st {{i}}' > CMD
+
+build-tcl: (_check "tclsh")
+  echo 'tclsh ./count.tcl {{i}}' > CMD
