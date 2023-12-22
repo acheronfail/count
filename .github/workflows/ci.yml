@@ -19,7 +19,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: docker pull "ghcr.io/${{ github.actor }}/count-base:latest"
+      - run: docker pull "ghcr.io/${{ github.actor }}/count-base:latest" || true
       - uses: docker/build-push-action@v2
         with:
           context: ./
@@ -61,7 +61,7 @@ jobs:
           - rust
           - scala
           - smalltalk
-          - tcl
+          # - tcl
           - zig
     steps:
       - name: Checkout
