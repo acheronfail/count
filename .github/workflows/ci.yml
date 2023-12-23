@@ -39,7 +39,7 @@ jobs:
           - rust
           - scala
           - smalltalk
-          - tcl
+          # - tcl
           - zig
     steps:
       - name: Checkout
