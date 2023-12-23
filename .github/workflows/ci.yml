@@ -8,25 +8,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-base-image:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v1
-      - uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - run: docker pull "ghcr.io/${{ github.actor }}/count-base:latest" || true
-      - uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./Dockerfile
-          push: true
-          tags: "ghcr.io/${{ github.actor }}/count-base:latest"
-
   run:
     needs: ['build-base-image']
     runs-on: ubuntu-latest
@@ -61,17 +42,59 @@ jobs:
           - rust
           - scala
           - smalltalk
-          # - tcl
+          - tcl
           - zig
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            ~/.cargo/.crates.toml
+            ~/.cargo/.crates2.json
+            target/
+          key: ${{ runner.os }}-cargo
+      - uses: actions/cache@v3
+        with:
+          path: scripts/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
       # install dependencies
       - uses: extractions/setup-just@v1
       - uses: oven-sh/setup-bun@v1
       - uses: denoland/setup-deno@v1
         with:
           deno-version: "~1"
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cargo clang coffeescript curl erlang gfortran \
+                                  gnucobol4 gnu-smalltalk haskell-platform jq kotlin moreutils nasm \
+                                  nodejs php rustc scala swi-prolog tar tcl wget xz-utils
+          cargo install timers
+          cargo install hyperfine
+          cargo install ripgrep --features 'pcre2'
+          cargo install juliaup
+
+          juliaup add release
+
+          wget -qO choosenim.sh https://nim-lang.org/choosenim/init.sh
+          bash ./choosenim.sh -y
+          echo "$HOME/.nimble/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.nimble/bin:$PATH"
+
+          curl -fsSL https://crystal-lang.org/install.sh | sudo bash
+
+          mkdir -p /opt/zig && cd $_
+          wget --quiet -O zig.tar.xz $(curl --silent https://ziglang.org/download/index.json | jq -r '.[keys_unsorted[1]]["x86_64-linux"].tarball')
+          tar -xvf zig.tar.xz --strip-components=1 2>&1 >/dev/null
+          echo "/opt/zig" >> $GITHUB_PATH
+          export PATH="/opt/zig:$PATH"
+          cd -
+
       # do the thing
       - run: just measure ${{ matrix.build }}
       # report
