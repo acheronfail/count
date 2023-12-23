@@ -9,10 +9,7 @@ on:
 
 jobs:
   run:
-    needs: ['build-base-image']
     runs-on: ubuntu-latest
-    container:
-      image: "ghcr.io/${{ github.actor }}/count-base:latest"
     strategy:
       fail-fast: false
       matrix:
