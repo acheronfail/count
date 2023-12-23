@@ -54,12 +54,20 @@ summary results:
 
 # languages
 
-build-gcc: (_check "gcc")
+build-c-gcc: (_check "gcc")
   gcc -O3 ./count.c
   echo './a.out {{i}}' > CMD
 
-build-clang: (_check "clang")
+build-c-clang: (_check "clang")
   clang -O3 ./count.c
+  echo './a.out {{i}}' > CMD
+
+build-cpp-gcc: (_check "g++")
+  g++ -O3 ./count.cpp
+  echo './a.out {{i}}' > CMD
+
+build-cpp-clang: (_check "clang++")
+  clang++ -O3 ./count.cpp
   echo './a.out {{i}}' > CMD
 
 build-rust: (_check "rustc")

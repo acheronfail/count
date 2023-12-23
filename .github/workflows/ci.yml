@@ -16,14 +16,16 @@ jobs:
         build:
           - assembly
           - bun
-          - clang
+          - c-gcc
+          - c-clang
+          - cpp-gcc
+          - cpp-clang
           - cobol
           - coffeescript
           - crystal
           - deno
           - erlang
           - fortran
-          - gcc
           - go
           - haskell
           - java
