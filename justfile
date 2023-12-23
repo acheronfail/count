@@ -158,3 +158,7 @@ build-smalltalk: (_check "gst")
 
 build-tcl: (_check "tclsh")
   echo 'tclsh ./count.tcl {{i}}' > CMD
+
+build-pascal: (_check "fpc")
+  fpc -O3 ./count.pas
+  echo './count {{i}}' > CMD

@@ -33,6 +33,7 @@ jobs:
           - kotlin
           - nim
           - node
+          - pascal
           - perl
           - php
           - prolog
@@ -70,9 +71,30 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cargo clang coffeescript curl erlang gfortran \
-                                  gnucobol4 gnu-smalltalk haskell-platform jq kotlin moreutils nasm \
-                                  nodejs php rustc scala swi-prolog tar tcl wget xz-utils
+          sudo apt-get install -y \
+            build-essential \
+            cargo \
+            clang \
+            coffeescript \
+            curl \
+            erlang \
+            fp-compiler \
+            gfortran \
+            gnu-smalltalk \
+            gnucobol4 \
+            haskell-platform \
+            jq kotlin \
+            moreutils \
+            nasm \
+            nodejs \
+            php \
+            rustc \
+            scala \
+            swi-prolog \
+            tar \
+            tcl \
+            wget \
+            xz-utils
           cargo install timers
           cargo install hyperfine
           cargo install ripgrep --features 'pcre2'
