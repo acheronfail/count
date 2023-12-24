@@ -41,6 +41,6 @@ end_program:
     ; note we use libc's `exit` here rather than linux's exit syscall so that
     ; stdout's buffers are flushed (otherwise printf's buffers sometimes don't
     ; make it out).
-    mov rax, 0
-    push rax
+    mov rdi, 0
+    push rdi
     call exit
