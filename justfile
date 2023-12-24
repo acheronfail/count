@@ -52,6 +52,39 @@ measure what:
 summary results:
   cd scripts && node ./summary.js --results ..
 
+test what:
+  #!/usr/bin/env bash
+  just build {{what}}
+  tests=(
+    1          1
+    10         11
+    100        101
+    1000       1001
+    10000      10001
+    100000     100001
+    1000000    1000001
+    10000000   10000001
+    100000000  100000001
+    1000000000 1000000001
+  )
+
+  for ((i=0;i< ${#tests[@]} ;i+=2)); do
+    input="${tests[i]}"
+    expect="${tests[i+1]}"
+    cmd="$(cat CMD)"
+    cmd="${cmd/{{i}}/"$input"}"
+    actual="$($cmd)"
+    echo -n $cmd
+    if [[ "$actual" != "$expect" ]]; then
+      echo " (fail)"
+      echo "fail, sent ${input} and expected ${expect} but got ${actual}"
+      echo "command was: $cmd"
+      exit 1
+    else
+      echo " (ok)"
+    fi
+  done
+
 # languages
 
 build-c-gcc: (_check "gcc")
