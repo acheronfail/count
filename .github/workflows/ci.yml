@@ -31,6 +31,7 @@ jobs:
           - java
           - julia
           - kotlin
+          - lua
           - nim
           - node
           - pascal
@@ -83,7 +84,9 @@ jobs:
             gnu-smalltalk \
             gnucobol4 \
             haskell-platform \
-            jq kotlin \
+            jq \
+            kotlin \
+            lua5.4 \
             moreutils \
             nasm \
             nodejs \

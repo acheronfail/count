@@ -162,3 +162,6 @@ build-tcl: (_check "tclsh")
 build-pascal: (_check "fpc")
   fpc -O3 ./count.pas
   echo './count {{i}}' > CMD
+
+build-lua: (_check "lua")
+  echo 'lua ./count.lua {{i}}' > CMD
