@@ -85,7 +85,7 @@ jobs:
             gforth \
             gfortran \
             gnu-smalltalk \
-            gnucobol4 \
+            gnucobol3 \
             haskell-platform \
             jq \
             kotlin \
