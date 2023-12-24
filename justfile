@@ -171,4 +171,4 @@ build-forth: (_check "gforth")
 
 build-csharp: (_check "mcs mono")
   mcs -o+ ./count.cs
-  echo 'mono ./count.exe {{i}}'
+  echo 'mono ./count.exe {{i}}' > CMD
