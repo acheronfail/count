@@ -124,6 +124,7 @@ jobs:
           cd -
 
       # do the thing
+      - run: just test    ${{ matrix.build }}
       - run: just measure ${{ matrix.build }}
       # report
       - uses: actions/upload-artifact@v3
