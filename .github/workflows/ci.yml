@@ -23,6 +23,7 @@ jobs:
           - cobol
           - coffeescript
           - crystal
+          - csharp
           - deno
           - erlang
           - forth
@@ -89,6 +90,7 @@ jobs:
             jq \
             kotlin \
             lua5.4 \
+            mono-devel \
             moreutils \
             nasm \
             nodejs \

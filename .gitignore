@@ -6,6 +6,7 @@ results
 *.class
 *.json
 *.o
+*.exe
 *.hi
 count
 java/

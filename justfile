@@ -168,3 +168,7 @@ build-lua: (_check "lua")
 
 build-forth: (_check "gforth")
   echo 'gforth ./count.fth {{i}}' > CMD
+
+build-csharp: (_check "msc mono")
+  mono -o+ ./count.cs
+  echo 'mono ./count.exe {{i}}'
