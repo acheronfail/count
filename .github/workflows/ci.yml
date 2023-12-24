@@ -25,6 +25,7 @@ jobs:
           - crystal
           - deno
           - erlang
+          - forth
           - fortran
           - go
           - haskell
@@ -80,6 +81,7 @@ jobs:
             curl \
             erlang \
             fp-compiler \
+            gforth \
             gfortran \
             gnu-smalltalk \
             gnucobol4 \

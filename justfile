@@ -165,3 +165,6 @@ build-pascal: (_check "fpc")
 
 build-lua: (_check "lua")
   echo 'lua ./count.lua {{i}}' > CMD
+
+build-forth: (_check "gforth")
+  echo 'gforth ./count.fth {{i}}' > CMD
