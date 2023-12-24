@@ -1,10 +1,10 @@
 \ tip: use `.s CR` to print the stack
 : count-fn  ( n -- n )
-    0                         \ init "i"
-    begin over over >= while  \ '>=' takes 2 args, and `while` takes 1
+    0                       \ init "i"
+    begin over over > while \ '>' pops 2 off stack, and `while` pops 1
         1+ 1 or
     repeat
-    swap drop                 \ return "i"
+    swap drop               \ return "i"
 ;
 
 : main

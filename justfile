@@ -73,11 +73,11 @@ test what:
     expect="${tests[i+1]}"
     cmd="$(cat CMD)"
     cmd="${cmd/{{i}}/"$input"}"
-    actual="$($cmd)"
-    echo -n $cmd
+    echo -n "test: '"$cmd"'"
+    actual="$($cmd 2>&1 | grep -v '^%' | xargs)"
     if [[ "$actual" != "$expect" ]]; then
       echo " (fail)"
-      echo "fail, sent ${input} and expected ${expect} but got ${actual}"
+      echo "fail, sent '${input}' and expected '${expect}' but got '${actual}'"
       echo "command was: $cmd"
       exit 1
     else
@@ -163,7 +163,7 @@ build-erlang: (_check "erlc erl")
 build-crystal: (_check "crystal")
   echo 'crystal run ./count.cr -- {{i}}' > CMD
 
-build-assembly: (_check "nasm")
+build-assembly: (_check "nasm ld")
   nasm -f elf64 count.asm
   ld count.o -o count -lc -I/lib64/ld-linux-x86-64.so.2
   echo './count {{i}}' > CMD
@@ -183,7 +183,7 @@ build-nim: (_check "nim")
   echo './count {{i}}' > CMD
 
 build-prolog: (_check "swipl")
-  swipl -s count.pro -g "main" -t halt -- 10
+  swipl -s count.pro -g "main" -t halt -- 1
   echo './count {{i}}' > CMD
 
 build-smalltalk: (_check "gst")

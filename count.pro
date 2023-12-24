@@ -1,5 +1,5 @@
 count(I, Target, I) :-
-    (I > Target).
+    (I >= Target).
 count(I, Target, Result) :-
     (I < Target ->
         NewI is (I + 1) \/ 1,
@@ -7,7 +7,7 @@ count(I, Target, Result) :-
     ).
 
 main :-
-    current_prolog_flag(argv, [TargetString|_]),
+    current_prolog_flag(argv, [TargetString]),
     atom_number(TargetString, Target),
     count(0, Target, Result),
     writeln(Result),

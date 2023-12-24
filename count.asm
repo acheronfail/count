@@ -32,7 +32,7 @@ count:
 
     ; print
     mov rdi, format ; rdi: first argument
-    mov esi, eax    ; esi: second argument
+    mov esi, ecx    ; esi: second argument
     xor eax, eax    ; number of vector registers used is 0
     call printf
 
