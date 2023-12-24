@@ -3,8 +3,8 @@ program count;
 uses SysUtils;
 
 var
-  i: Integer;
-  target: Integer;
+  i: LongInt;
+  target: LongInt;
 begin
   i := 0;
   target := StrToInt(ParamStr(1));
