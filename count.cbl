@@ -11,7 +11,7 @@ working-storage section.
 
 procedure division.
 accept target from command-line
-perform until i > target
+perform until i >= target
     add 1 to i
     call "CBL_OR" using 1 i by value len returning or-result end-call
 end-perform.
