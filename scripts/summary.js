@@ -17,7 +17,7 @@ const results = await Promise.all(
       const json = JSON.parse(text);
 
       return {
-        name: [name, json.command].join(' :: '),
+        name: [name.replace(/\.json$/, ''), json.command].join(' :: '),
         ...json,
       };
     })
