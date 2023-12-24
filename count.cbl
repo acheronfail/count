@@ -1,18 +1,20 @@
-IDENTIFICATION DIVISION.
-PROGRAM-ID. IncrementProgram.
+identification division.
+program-id. count.
 
-DATA DIVISION.
-WORKING-STORAGE SECTION.
-01 i PIC 9(10) VALUE 0.
-01 target PIC 9(10).
-01 quotient PIC 9(10).
-01 rem PIC 9(10).
+data division.
+working-storage section.
+01 i pic 9(10) value 0 usage comp-5.
+01 target pic 9(10).
+01 len pic 9(10) value 1.
+01 or-result pic 9(10).
+01 result pic z(10).
 
-PROCEDURE DIVISION.
-ACCEPT target FROM COMMAND-LINE
-PERFORM UNTIL i = target
-    ADD 1 TO i
-    ADD 1 TO i *> should be bitwise or 1 but no bit-or in cobol :/
-END-PERFORM.
-DISPLAY i
-STOP RUN.
+procedure division.
+accept target from command-line
+perform until i > target
+    add 1 to i
+    call "CBL_OR" using 1 i by value len returning or-result end-call
+end-perform.
+move i to result
+display result
+stop run.
