@@ -2,6 +2,7 @@ section .data
 format db "%d", 10, 0
 
 section .text
+extern exit
 extern printf
 global _start
 
@@ -37,6 +38,9 @@ count:
     call printf
 
 end_program:
-    mov eax, 60  ; system call number for exit
-    xor edi, edi ; exit code 0
-    syscall
+    ; note we use libc's `exit` here rather than linux's exit syscall so that
+    ; stdout's buffers are flushed (otherwise printf's buffers sometimes don't
+    ; make it out).
+    mov rax, 0
+    push rax
+    call exit
