@@ -9,6 +9,16 @@ _default:
 setup: (_check "npm")
   cd scripts && npm install
 
+build-docker:
+  docker build --platform 'linux/amd64' -t count .
+
+# just checks if mono can be installed in docker, since there's an issue with it
+# currently preventing us from shipping this docker image properly
+# see: https://github.com/mono/mono/issues/21423
+check-docker:
+  docker run --rm -ti --platform 'linux/amd64' ubuntu \
+    sh -c 'apt update && DEBIAN_FRONTEND=noninteractive TZ="Europe/London" apt install -y mono-complete'
+
 build what:
   just build-{{what}}
 

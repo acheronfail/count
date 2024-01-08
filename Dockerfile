@@ -39,7 +39,6 @@ RUN sudo -E apt-get install -y nasm
 RUN sudo -E apt-get install -y nodejs
 RUN sudo -E apt-get install -y php
 RUN sudo -E apt-get install -y scala
-# TODO: also try gnu-prolog
 RUN sudo -E apt-get install -y swi-prolog
 RUN sudo -E apt-get install -y tcl
 
@@ -62,6 +61,7 @@ ENV PATH="/opt/zig:$PATH"
 
 # FIXME: https://github.com/mono/mono/issues/21423
 # installing gdb/lldb provide a better error message when mono-devel fails to install
-# TODO: try replacing with dotnot
-# RUN sudo -E apt-get install -y gdb lldb
-# RUN sudo -E apt-get install -y mono-devel
+RUN sudo -E apt-get install -y gdb lldb
+RUN sudo -E apt-get install -y mono-complete
+
+# TODO: when this docker image works, get CI to use it
