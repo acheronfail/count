@@ -1,13 +1,13 @@
 FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 RUN apt-get update && apt-get install -y \
   build-essential clang coffeescript curl default-jdk default-jre erlang \
   fp-compiler gdb lldb gforth gfortran gnu-smalltalk gnucobol3 golang \
-  haskell-platform jq kotlin lua5.4 moreutils nasm nodejs npm php scala sudo \
-  swi-prolog tar tcl unzip wget xz-utils \
+  haskell-platform jq kotlin lua5.4 mono-complete moreutils nasm nodejs php \
+  scala sudo swi-prolog tar tcl unzip wget xz-utils \
   && apt-get clean
-# FIXME: also install mono-complete, see: https://github.com/mono/mono/issues/21423
 
 RUN useradd -m runner && echo "runner ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/runner
 USER runner
@@ -42,6 +42,4 @@ ENV PATH="/opt/zig:$PATH"
 
 WORKDIR /data
 COPY --chown=runner:runner . .
-RUN cd ./scripts && npm install
-
-# TODO: when this docker image works, get CI to use it
+RUN cd scripts && npm install

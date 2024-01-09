@@ -1,4 +1,5 @@
 i := '1000000000'
+tag := 'acheronfail/count'
 
 _default:
   just -l
@@ -9,34 +10,31 @@ _default:
 setup: (_check "npm")
   cd scripts && npm install
 
-docker-amd64:
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD:/data" ubuntu:22.04 bash
+docker-sh: docker-build
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" {{tag}}
 
+# NOTE: there are issues if you try to build this on an arm macbook via rosetta emulation
+# - mono fails to install (https://github.com/mono/mono/issues/21423)
+# - getting erlang version segfaults
 docker-build:
-  docker build --progress=plain --platform 'linux/amd64' -t count .
+  docker build --progress=plain --platform 'linux/amd64' -t {{tag}} .
+
+docker-push: docker-build
+  docker push {{tag}}
 
 docker-measure what: docker-build
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" count just measure {{what}}
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" {{tag}} just measure {{what}}
 
 docker-measure-all: docker-build
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" count just measure-all
-
-# just checks if mono can be installed in docker, since there's an issue with it
-# currently preventing us from shipping this docker image properly
-# see: https://github.com/mono/mono/issues/21423
-docker-check:
-  docker run --rm -ti --platform 'linux/amd64' ubuntu \
-    sh -c 'apt update && DEBIAN_FRONTEND=noninteractive TZ="Europe/London" apt install -y mono-complete'
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" {{tag}} just measure-all
 
 measure-all:
   #!/usr/bin/env bash
   set -exuo pipefail
 
   for lang in $(just -l | grep 'build-' | cut -d'-' -f2- | xargs); do
-    # currently disabled since it doesn't work in docker
-    if [[ "$lang" != "csharp" ]]; then
-      just measure $lang;
-    fi
+    just test "$lang";
+    just measure "$lang";
   done
 
   node ./scripts/summary.js --results .
