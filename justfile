@@ -19,13 +19,16 @@ docker-sh: docker-build
 docker-build:
   docker build --progress=plain --platform 'linux/amd64' -t {{tag}} .
 
+docker-pull:
+  docker pull {{tag}}
+
 docker-push: docker-build
   docker push {{tag}}
 
-docker-measure what: docker-build
+docker-measure what:
   docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" {{tag}} just measure {{what}}
 
-docker-measure-all: docker-build
+docker-measure-all:
   docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" {{tag}} just measure-all
 
 measure-all:
