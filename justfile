@@ -13,10 +13,13 @@ docker-amd64:
   docker run --rm -ti --platform 'linux/amd64' -v "$PWD:/data" ubuntu:22.04 bash
 
 docker-build:
-  docker build --platform 'linux/amd64' -t count .
+  docker build --progress=plain --platform 'linux/amd64' -t count .
 
-docker-measure: docker-build
-  docker run --rm -ti --platform 'linux/amd64' count just measure-all
+docker-measure what: docker-build
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" count just measure {{what}}
+
+docker-measure-all: docker-build
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" count just measure-all
 
 # just checks if mono can be installed in docker, since there's an issue with it
 # currently preventing us from shipping this docker image properly
@@ -31,7 +34,7 @@ measure-all:
 
   for lang in $(just -l | grep 'build-' | cut -d'-' -f2- | xargs); do
     # currently disabled since it doesn't work in docker
-    if [[ "$lang" != "csharp" ]] && [[ "$lang" != "erlang" ]]; then
+    if [[ "$lang" != "csharp" ]]; then
       just measure $lang;
     fi
   done
@@ -73,7 +76,8 @@ measure what:
       fi
   done
 
-  out="{{what}}.json"
+  mkdir -p results
+  out="results/{{what}}.json"
 
   hyperfine $args --shell=none --export-json "$out" "$(cat CMD)"
   jq '.results[0] | del(.exit_codes)' "$out" | sponge "$out"
@@ -81,7 +85,7 @@ measure what:
   timers $(cat CMD) >/dev/null 2> >(jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1')'}' "$out" | sponge "$out")
 
 summary results:
-  cd scripts && node ./summary.js --results ..
+  cd scripts && node ./summary.js --results ../results
 
 test what:
   #!/usr/bin/env bash

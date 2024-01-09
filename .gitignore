@@ -1,5 +1,5 @@
 build
-results
+results/*.json
 *.out
 *.dump
 *.beam
