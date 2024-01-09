@@ -1,6 +1,7 @@
-import { readFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises';
 import { readdirSync } from 'fs';
 import { join } from 'path';
+import { markdownTable } from 'markdown-table';
 import formatTime from 'pretty-time';
 import formatSize from 'pretty-bytes';
 import minimist from 'minimist';
@@ -18,29 +19,31 @@ const results = await Promise.all(
     })
 );
 
-console.table(
-  results
+await writeFile(
+  'summary.md',
+  `
+${markdownTable([
+  ['name', 'command', 'version'],
+  ...results
     .slice()
     .sort((a, b) => a.name.localeCompare(b.name))
-    .map(({ name, command, version }) => ({ name, command, version }))
-);
+    .map(({ name, command, version }) => [name, command, version]),
+])}
 
-console.table(
-  results
+${markdownTable([
+  ['name', 'mean'],
+  ...results
     .slice()
     .sort((a, b) => a.mean - b.mean)
-    .map(({ name, mean }) => ({
-      name,
-      mean: formatTime(Math.floor(mean * 1_000_000_000), undefined, 5),
-    }))
-);
+    .map(({ name, mean }) => [name, formatTime(Math.floor(mean * 1_000_000_000), undefined, 5)]),
+])}
 
-console.table(
-  results
+${markdownTable([
+  ['name', 'max_rss'],
+  ...results
     .slice()
     .sort((a, b) => a.max_rss - b.max_rss)
-    .map(({ name, max_rss }) => ({
-      name,
-      max_rss: formatSize(max_rss, { minimumFractionDigits: 7 }),
-    }))
+    .map(({ name, max_rss }) => [name, formatSize(max_rss, { minimumFractionDigits: 7 })]),
+])}
+`.trim()
 );

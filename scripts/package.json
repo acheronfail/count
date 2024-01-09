@@ -1,10 +1,11 @@
 {
   "type": "module",
   "scripts": {
-    "start": "npm install && node summary.js"
+    "start": "npm install >/dev/null && node summary.js"
   },
   "dependencies": {
     "human-readable": "^0.2.1",
+    "markdown-table": "^3.0.3",
     "minimist": "^1.2.8",
     "pretty-bytes": "^6.1.1",
     "pretty-time": "^1.1.0"

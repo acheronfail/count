@@ -80,16 +80,13 @@ jobs:
       - name: Generate Summary
         run: |
           cd scripts
-          npm start -- --results ../artifact > summary.txt
-          cat summary.txt
+          npm start -- --results ../artifact
+          cat summary.md
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.run_number }}
-          body_path: scripts/summary.txt
+          body_path: scripts/summary.md
           files: artifact/*.json
           draft: false
           prerelease: false
-      - uses: actions/upload-artifact@v3
-        with:
-          path: scripts/summary.txt

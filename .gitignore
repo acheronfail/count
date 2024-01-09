@@ -12,6 +12,7 @@ count
 java/
 kotlin/
 scala/
+scripts/summary.md
 CMD
 VERSION
 STATS
