@@ -66,6 +66,9 @@ jobs:
   report:
     needs: ["run"]
     runs-on: ubuntu-latest
+    permissions:
+      # needed for creating the github release
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
