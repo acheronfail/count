@@ -1,10 +1,50 @@
-section .data
+; Handmade x86_64 ELF binary, no linker needed! The ELF header is defined manually.
+; This means the binary size is very small.
+;
+; Recommended reading:
+; - https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+; - https://en.wikibooks.org/wiki/X86_Assembly/X86_Architecture
+; - https://www.muppetlabs.com/~breadbox/software/tiny/teensy.html
+
+BITS 64
+
+    org     0x08048000
+
+elf_header:                       ; Elf64_Ehdr
+    db      0x7F, "ELF"           ;   e_ident[ei_mag0 - ei_mag3]
+    db      2                     ;   e_ident[ei_class] (1=32bit, 2=64bit)
+    db      1                     ;   e_ident[ei_data] (1=little endian, 2=big endian)
+    db      1                     ;   e_ident[ei_version]
+    db      0                     ;   e_ident[ei_osabi]
+    dq      0                     ;   e_ident[ei_abiversion] +   e_ident[ei_pad]
+    dw      2                     ;   e_type
+    dw      0x3e                  ;   e_machine (0x3=32bit, 0x3e=amd64)
+    dd      1                     ;   e_version
+    dq      _start                ;   e_entry
+    dq      program_header - $$   ;   e_phoff
+    dq      0                     ;   e_shoff
+    dd      0                     ;   e_flags
+    dw      elf_header_size       ;   e_ehsize
+    dw      program_header_size   ;   e_phentsize
+    dw      1                     ;   e_phnum
+    dw      0                     ;   e_shentsize
+    dw      0                     ;   e_shnum
+    dw      0                     ;   e_shstrndx
+    elf_header_size equ $ - elf_header
+
+program_header:                   ; Elf64_Phdr
+    dd      1                     ;   p_type
+    dd      7                     ;   p_flags (bitmask: x=0x1, w=0x2, r=0x4; we set to rwx)
+    dq      0                     ;   p_offset
+    dq      $$                    ;   p_vaddr
+    dq      $$                    ;   p_paddr
+    dq      filesize              ;   p_filesz
+    dq      filesize              ;   p_memsz
+    dq      0x1000                ;   p_align
+    program_header_size equ $ - program_header
+
     ten    dq 10
     output db 10 dup(0), 10 ; max 32bit number is 10 digits (decimal) long, followed by newline
-
-section .text
-
-global _start
 
 _start:                 ; argc is at `rsp`, argv is at `rsp + 8`
     mov rdi, [rsp + 8]  ; put argv into `rdi`
@@ -52,3 +92,5 @@ end_program:             ; args; `rax` syscall, `rdi` exit code
     mov eax, 60
     xor edi, edi
     syscall
+
+    filesize equ $ - $$

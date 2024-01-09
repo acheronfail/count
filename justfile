@@ -176,9 +176,9 @@ build-erlang: (_check "erlc erl")
 build-crystal: (_check "crystal")
   echo 'crystal run ./count.cr -- {{i}}' > CMD
 
-build-assembly: (_check "nasm ld")
-  nasm -f elf64 count.asm
-  ld -s count.o -o count
+build-assembly: (_check "nasm")
+  nasm -f bin -o count ./count.asm
+  chmod +x ./count
   echo './count {{i}}' > CMD
 
 build-cobol: (_check "cobc")
