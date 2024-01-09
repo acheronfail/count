@@ -11,15 +11,10 @@ RUN curl \
    -sSfL \
    --proto '=https' \
    --tlsv1.2 \
-   https://sh.rustup.rs | sh -s -- --default-toolchain stable -y
-
-RUN curl \
-  -sSfL \
-  --proto '=https' \
-  --tlsv1.2 \
-   https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+   https://sh.rustup.rs | sh -s -- --default-toolchain stable -y; ls -la /home/runner
 
 ENV PATH="/home/runner/.cargo/bin:$PATH"
+RUN echo $PATH; ls -la /home/runner; cargo install cargo-binstall
 RUN cargo binstall --no-confirm hyperfine just ripgrep timers
 
 RUN cargo binstall --no-confirm juliaup && juliaup add release
@@ -61,7 +56,11 @@ ENV PATH="/opt/zig:$PATH"
 
 # FIXME: https://github.com/mono/mono/issues/21423
 # installing gdb/lldb provide a better error message when mono-devel fails to install
-RUN sudo -E apt-get install -y gdb lldb
-RUN sudo -E apt-get install -y mono-complete
+# RUN sudo -E apt-get install -y gdb lldb
+# RUN sudo -E apt-get install -y mono-complete
+
+WORKDIR /data
+COPY . .
+RUN cd ./scripts && npm install
 
 # TODO: when this docker image works, get CI to use it

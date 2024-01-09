@@ -13,7 +13,10 @@ docker-amd64:
   docker run --rm -ti --platform 'linux/amd64' -v "$PWD:/data" ubuntu:22.04 bash
 
 build-docker:
-  docker build --platform 'linux/amd64' -t count .
+  DOCKER_BUILDKIT=0 docker build --platform 'linux/amd64' -t count .
+
+measure-docker: build-docker
+  docker run --rm -ti --platform 'linux/amd64' count just measure-all
 
 # just checks if mono can be installed in docker, since there's an issue with it
 # currently preventing us from shipping this docker image properly
@@ -21,6 +24,14 @@ build-docker:
 check-docker:
   docker run --rm -ti --platform 'linux/amd64' ubuntu \
     sh -c 'apt update && DEBIAN_FRONTEND=noninteractive TZ="Europe/London" apt install -y mono-complete'
+
+measure-all:
+  #!/usr/bin/env bash
+  set -exuo pipefail
+
+  for lang in $(just -l | grep 'build-' | cut -d'-' -f2- | xargs); do
+    just measure $lang;
+  done
 
 build what:
   rm -f CMD VERSION
