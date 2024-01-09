@@ -22,28 +22,43 @@ const results = await Promise.all(
 await writeFile(
   'summary.md',
   `
-${markdownTable([
-  ['name', 'command', 'version'],
-  ...results
-    .slice()
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map(({ name, command, version }) => [name, command, version]),
-])}
+${markdownTable(
+  [
+    ['name', 'command', 'version'],
+    ...results
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(({ name, command, version }) => [name, command, version]),
+  ],
+  {
+    align: ['l', 'l', 'l'],
+  }
+)}
 
-${markdownTable([
-  ['name', 'mean'],
-  ...results
-    .slice()
-    .sort((a, b) => a.mean - b.mean)
-    .map(({ name, mean }) => [name, formatTime(Math.floor(mean * 1_000_000_000), undefined, 5)]),
-])}
+${markdownTable(
+  [
+    ['name', 'mean'],
+    ...results
+      .slice()
+      .sort((a, b) => a.mean - b.mean)
+      .map(({ name, mean }) => [name, formatTime(Math.floor(mean * 1_000_000_000), undefined, 5)]),
+  ],
+  {
+    align: ['l', 'r'],
+  }
+)}
 
-${markdownTable([
-  ['name', 'max_rss'],
-  ...results
-    .slice()
-    .sort((a, b) => a.max_rss - b.max_rss)
-    .map(({ name, max_rss }) => [name, formatSize(max_rss, { minimumFractionDigits: 7 })]),
-])}
+${markdownTable(
+  [
+    ['name', 'max_rss'],
+    ...results
+      .slice()
+      .sort((a, b) => a.max_rss - b.max_rss)
+      .map(({ name, max_rss }) => [name, formatSize(max_rss, { minimumFractionDigits: 7 })]),
+  ],
+  {
+    align: ['l', 'r'],
+  }
+)}
 `.trim()
 );

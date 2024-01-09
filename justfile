@@ -87,6 +87,7 @@ measure what:
 
 summary:
   cd scripts && npm start -- --results ../results
+  cat scripts/summary.md
 
 test what:
   #!/usr/bin/env bash
