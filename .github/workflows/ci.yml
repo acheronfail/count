@@ -9,7 +9,6 @@ on:
 
 jobs:
   run:
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -47,89 +46,22 @@ jobs:
           - smalltalk
           # - tcl
           - zig
+    runs-on: ubuntu-latest
+    container:
+      image: acheronfail/count
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            ~/.cargo/.crates.toml
-            ~/.cargo/.crates2.json
-            target/
-          key: ${{ runner.os }}-cargo
-      - uses: actions/cache@v3
-        with:
-          path: scripts/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
-      # install dependencies
-      - uses: extractions/setup-just@v1
-      - uses: oven-sh/setup-bun@v1
-      - uses: denoland/setup-deno@v1
-        with:
-          deno-version: "~1"
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            cargo \
-            clang \
-            coffeescript \
-            curl \
-            erlang \
-            fp-compiler \
-            gforth \
-            gfortran \
-            gnu-smalltalk \
-            gnucobol3 \
-            haskell-platform \
-            jq \
-            kotlin \
-            lua5.4 \
-            mono-devel \
-            moreutils \
-            nasm \
-            nodejs \
-            php \
-            rustc \
-            scala \
-            swi-prolog \
-            tar \
-            tcl \
-            wget \
-            xz-utils
-          cargo install timers
-          cargo install hyperfine
-          cargo install ripgrep --features 'pcre2'
-          cargo install juliaup
-
-          juliaup add release
-
-          wget -qO choosenim.sh https://nim-lang.org/choosenim/init.sh
-          bash ./choosenim.sh -y
-          echo "$HOME/.nimble/bin" >> $GITHUB_PATH
-          export PATH="$HOME/.nimble/bin:$PATH"
-
-          curl -fsSL https://crystal-lang.org/install.sh | sudo bash
-
-          mkdir -p /opt/zig && cd $_
-          wget --quiet -O zig.tar.xz $(curl --silent https://ziglang.org/download/index.json | jq -r '.[keys_unsorted[1]]["x86_64-linux"].tarball')
-          tar -xvf zig.tar.xz --strip-components=1 2>&1 >/dev/null
-          echo "/opt/zig" >> $GITHUB_PATH
-          export PATH="/opt/zig:$PATH"
-          cd -
-
+      # really github? why do you override $HOME?
+      # https://github.com/actions/runner/issues/863
+      - run: 'echo HOME=/root >> $GITHUB_ENV'
       # do the thing
       - run: just test    ${{ matrix.build }}
       - run: just measure ${{ matrix.build }}
       # report
       - uses: actions/upload-artifact@v3
         with:
-          path: "${{ matrix.build }}.json"
+          path: "results/${{ matrix.build }}.json"
 
   report:
     needs: ["run"]
@@ -145,8 +77,7 @@ jobs:
       - name: Generate Summary
         run: |
           cd scripts
-          npm install
-          node ./summary.js --results ../artifact > summary.txt
+          npm start -- --results ../artifact > summary.txt
           cat summary.txt
       - uses: actions/upload-artifact@v3
         with:

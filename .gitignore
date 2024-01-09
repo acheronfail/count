@@ -1,5 +1,5 @@
 build
-results
+results/*.json
 *.out
 *.dump
 *.beam
@@ -14,3 +14,4 @@ kotlin/
 scala/
 CMD
 VERSION
+STATS
