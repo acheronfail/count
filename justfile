@@ -12,16 +12,16 @@ setup: (_check "npm")
 docker-amd64:
   docker run --rm -ti --platform 'linux/amd64' -v "$PWD:/data" ubuntu:22.04 bash
 
-build-docker:
-  DOCKER_BUILDKIT=0 docker build --platform 'linux/amd64' -t count .
+docker-build:
+  docker build --platform 'linux/amd64' -t count .
 
-measure-docker: build-docker
+docker-measure: docker-build
   docker run --rm -ti --platform 'linux/amd64' count just measure-all
 
 # just checks if mono can be installed in docker, since there's an issue with it
 # currently preventing us from shipping this docker image properly
 # see: https://github.com/mono/mono/issues/21423
-check-docker:
+docker-check:
   docker run --rm -ti --platform 'linux/amd64' ubuntu \
     sh -c 'apt update && DEBIAN_FRONTEND=noninteractive TZ="Europe/London" apt install -y mono-complete'
 
@@ -30,8 +30,13 @@ measure-all:
   set -exuo pipefail
 
   for lang in $(just -l | grep 'build-' | cut -d'-' -f2- | xargs); do
-    just measure $lang;
+    # currently disabled since it doesn't work in docker
+    if [[ "$lang" != "csharp" ]] && [[ "$lang" != "erlang" ]]; then
+      just measure $lang;
+    fi
   done
+
+  node ./scripts/summary.js --results .
 
 build what:
   rm -f CMD VERSION

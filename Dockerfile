@@ -11,11 +11,18 @@ RUN curl \
    -sSfL \
    --proto '=https' \
    --tlsv1.2 \
-   https://sh.rustup.rs | sh -s -- --default-toolchain stable -y; ls -la /home/runner
-
+   https://sh.rustup.rs | sh -s -- --default-toolchain stable -y
 ENV PATH="/home/runner/.cargo/bin:$PATH"
-RUN echo $PATH; ls -la /home/runner; cargo install cargo-binstall
-RUN cargo binstall --no-confirm hyperfine just ripgrep timers
+RUN curl \
+  -sSfL \
+  --proto '=https' \
+  --tlsv1.2 \
+   https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+
+RUN cargo install ripgrep --features pcre2
+RUN cargo binstall --no-confirm hyperfine
+RUN cargo binstall --no-confirm just
+RUN cargo binstall --no-confirm timers
 
 RUN cargo binstall --no-confirm juliaup && juliaup add release
 RUN curl -fsSL https://bun.sh/install | bash
@@ -31,7 +38,7 @@ RUN sudo -E apt-get install -y haskell-platform
 RUN sudo -E apt-get install -y kotlin
 RUN sudo -E apt-get install -y lua5.4
 RUN sudo -E apt-get install -y nasm
-RUN sudo -E apt-get install -y nodejs
+RUN sudo -E apt-get install -y nodejs npm
 RUN sudo -E apt-get install -y php
 RUN sudo -E apt-get install -y scala
 RUN sudo -E apt-get install -y swi-prolog
@@ -60,7 +67,11 @@ ENV PATH="/opt/zig:$PATH"
 # RUN sudo -E apt-get install -y mono-complete
 
 WORKDIR /data
-COPY . .
+COPY --chown=runner:runner . .
 RUN cd ./scripts && npm install
+ENV PATH="/home/runner/.bun/bin:$PATH"
+ENV PATH="/home/runner/.deno/bin:$PATH"
+RUN sudo -E apt-get install -y golang
+RUN sudo -E apt-get install -y default-jdk default-jre
 
 # TODO: when this docker image works, get CI to use it
