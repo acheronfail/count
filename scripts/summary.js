@@ -21,11 +21,16 @@ const results = await Promise.all(
 console.table(
   results
     .slice()
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(({ name, command, version }) => ({ name, command, version }))
+);
+
+console.table(
+  results
+    .slice()
     .sort((a, b) => a.mean - b.mean)
-    .map(({ name, command, version, mean }) => ({
+    .map(({ name, mean }) => ({
       name,
-      command,
-      version,
       mean: formatTime(Math.floor(mean * 1_000_000_000), undefined, 5),
     }))
 );
@@ -34,10 +39,8 @@ console.table(
   results
     .slice()
     .sort((a, b) => a.max_rss - b.max_rss)
-    .map(({ name, command, version, max_rss }) => ({
+    .map(({ name, max_rss }) => ({
       name,
-      command,
-      version,
       max_rss: formatSize(max_rss, { minimumFractionDigits: 7 }),
     }))
 );
