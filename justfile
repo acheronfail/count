@@ -23,6 +23,7 @@ check-docker:
     sh -c 'apt update && DEBIAN_FRONTEND=noninteractive TZ="Europe/London" apt install -y mono-complete'
 
 build what:
+  rm -f CMD VERSION
   just build-{{what}}
 
 run what:
@@ -60,6 +61,7 @@ measure what:
 
   hyperfine $args --shell=none --export-json "$out" "$(cat CMD)"
   jq '.results[0] | del(.exit_codes)' "$out" | sponge "$out"
+  jq '. += {"name":"{{what}}","version":"'"$(cat VERSION)"'"}' "$out" | sponge "$out"
   timers $(cat CMD) >/dev/null 2> >(jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1')'}' "$out" | sponge "$out")
 
 summary results:
@@ -101,120 +103,157 @@ test what:
 # languages
 
 build-c-gcc: (_check "gcc")
+  gcc --version | head -1 > VERSION
   gcc -O3 ./count.c
   echo './a.out {{i}}' > CMD
 
 build-c-clang: (_check "clang")
+  clang --version | head -1 > VERSION
   clang -O3 ./count.c
   echo './a.out {{i}}' > CMD
 
 build-cpp-gcc: (_check "g++")
+  g++ --version | head -1 > VERSION
   g++ -O3 ./count.cpp
   echo './a.out {{i}}' > CMD
 
 build-cpp-clang: (_check "clang++")
+  clang++ --version | head -1 > VERSION
   clang++ -O3 ./count.cpp
   echo './a.out {{i}}' > CMD
 
 build-rust: (_check "rustc")
+  rustc --version > VERSION
   rustc -C opt-level=3 ./count.rs
   echo './count {{i}}' > CMD
 
 build-fortran: (_check "gfortran")
+  gfortran --version | head -1 > VERSION
   gfortran -O3 ./count.f90
   echo './a.out {{i}}' > CMD
 
 build-java: (_check "javac java")
+  javac --version > VERSION
+  java --version | head -1 >> VERSION
   javac count.java
   echo 'java count {{i}}' > CMD
 
 build-scala: (_check "scalac scala")
+  scalac -version > VERSION
+  scala -version >> VERSION
   scalac count.scala
   echo 'scala count {{i}}' > CMD
 
 build-kotlin: (_check "kotlinc java")
+  kotlinc -version > VERSION
+  java --version | head -1 >> VERSION
   kotlinc count.kt -include-runtime -d count.jar
   echo 'java -jar count.jar {{i}}' > CMD
 
 build-ruby: (_check "ruby")
+  ruby --version > VERSION
   echo 'ruby count.rb {{i}}' > CMD
 
 build-python3: (_check "python3")
+  python3 --version > VERSION
   echo 'python3 count.py {{i}}' > CMD
 
 build-node: (_check "node")
+  node --version > VERSION
   echo 'node count.js {{i}}' > CMD
 
 build-deno: (_check "deno")
+  deno --version | xargs > VERSION
   echo 'deno run count.deno {{i}}' > CMD
 
 build-bun: (_check "bun")
+  bun --version > VERSION
   echo 'bun run count.js {{i}}' > CMD
 
 build-zig: (_check "zig")
+  zig version > VERSION
   zig build-exe -O ReleaseFast ./count.zig
   echo './count {{i}}' > CMD
 
 build-perl: (_check "perl")
+  perl --version | grep version > VERSION
   echo 'perl ./count.pl {{i}}' > CMD
 
 build-haskell: (_check "ghc")
+  ghc --version > VERSION
   ghc count.hs
   echo './count {{i}}' > CMD
 
 build-go: (_check "go")
+  go version > VERSION
   go build -o count count.go
   echo './count {{i}}' > CMD
 
 build-php: (_check "php")
+  php --version | head -1 > VERSION
   echo 'php ./count.php {{i}}' > CMD
 
 build-erlang: (_check "erlc erl")
+  erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])), io:fwrite(Version), halt().' -noshell > VERSION
   erlc count.erl
   echo 'erl -noshell -s count start {{i}}' > CMD
 
 build-crystal: (_check "crystal")
+  crystal version | xargs > VERSION
   echo 'crystal run ./count.cr -- {{i}}' > CMD
 
 build-assembly: (_check "nasm")
+  nasm --version > VERSION
   nasm -f bin -o count ./count.asm
   chmod +x ./count
   echo './count {{i}}' > CMD
 
 build-cobol: (_check "cobc")
+  cobc --version | head -1 > VERSION
   cobc -O3 -free -x -o count count.cbl
   echo './count {{i}}' > CMD
 
 build-julia: (_check "julia")
+  julia --version > VERSION
   echo 'julia ./count.jl {{i}}' > CMD
 
 build-coffeescript: (_check "coffee")
+  coffee --version > VERSION
   echo 'coffee ./count.coffee {{i}}' > CMD
 
 build-nim: (_check "nim")
+  nim --version | head -1 > VERSION
   nim compile --opt:speed ./count.nim
   echo './count {{i}}' > CMD
 
 build-prolog: (_check "swipl")
+  swipl --version > VERSION
   swipl -s count.pro -g "main" -t halt -- 1
   echo './count {{i}}' > CMD
 
 build-smalltalk: (_check "gst")
+  gst --version | head -1 > VERSION
   echo 'gst -f count.st {{i}}' > CMD
 
 build-tcl: (_check "tclsh")
+  echo 'puts $tcl_version;exit 0' | tclsh > VERSION
   echo 'tclsh ./count.tcl {{i}}' > CMD
 
 build-pascal: (_check "fpc")
+  fpc -iW > VERSION
   fpc -O3 ./count.pas
   echo './count {{i}}' > CMD
 
 build-lua: (_check "lua")
+  lua -v > VERSION
   echo 'lua ./count.lua {{i}}' > CMD
 
 build-forth: (_check "gforth")
+  gforth --version > VERSION
   echo 'gforth ./count.fth {{i}}' > CMD
 
 build-csharp: (_check "mcs mono")
+  mcs --version > VERSION
+  mono --version | head -1 >> VERSION
   mcs -o+ ./count.cs
   echo 'mono ./count.exe {{i}}' > CMD
