@@ -1,46 +1,54 @@
 section .data
-format db "%d", 10, 0
+    ten    dq 10
+    output db 10 dup(0), 10 ; max 32bit number is 10 digits (decimal) long, followed by newline
 
 section .text
-extern exit
-extern printf
+
 global _start
 
-_start:
-    pop rdi ; argc is in rdi
-    pop rsi ; argv is in rsi
+_start:                 ; argc is at `rsp`, argv is at `rsp + 8`
+    mov rdi, [rsp + 8]  ; put argv into `rdi`
+    add rdi, 8          ; skip the first argument (program name)
 
-    add rsi, 8   ; skip the first argument
-    mov rdi, rsi ; move into rdi
-    xor rcx, rcx ; zero
-    xor rax, rax ; zero
-
-parse_arg:
+    xor rcx, rcx        ; zero
+    xor rax, rax        ; zero
+from_decimal_loop:
     movzx rdx, byte [rdi + rcx]
     sub rdx, '0'
     imul rax, rax, 10
     add rax, rdx
     inc rcx
     cmp byte [rdi + rcx], 0
-    jne parse_arg
+    jne from_decimal_loop
 
-    xor ecx, ecx
+    xor ecx, ecx       ; zero
 count:
     inc ecx
     or ecx, 1
     cmp ecx, eax
     jl count
 
-    ; print
-    mov rdi, format ; rdi: first argument
-    mov esi, ecx    ; esi: second argument
-    xor eax, eax    ; number of vector registers used is 0
-    call printf
+print:
+    mov eax, ecx         ; number is stored in `ecx`, put it in `eax` for division
+    lea rsi, [output+10] ; build the string from right to left, `rsi` tracks start of string
 
-end_program:
-    ; note we use libc's `exit` here rather than linux's exit syscall so that
-    ; stdout's buffers are flushed (otherwise printf's buffers sometimes don't
-    ; make it out).
-    mov rdi, 0
-    push rdi
-    call exit
+to_decimal_loop:
+    xor edx, edx         ; `edx` must be zeroed (`edx` and `eax` are combined for 64bit division)
+    div dword [ten]      ; divide by 10
+    add edx, '0'         ; remainer in `edx`, convert it to ascii
+    dec rsi              ; move to the previous char in the buffer
+    mov [rsi], dl        ; store the ascii character
+    test eax, eax        ; quotient in `eax`, test if 0
+    jnz to_decimal_loop  ; if not, convert the next digit
+
+write:                   ; args: `rax` syscall, `rdi` fd, `rsi` buf, `rdx` length
+    mov rax, 1
+    mov rdi, 1
+    lea rdx, [output+11]
+    sub rdx, rsi
+    syscall
+
+end_program:             ; args; `rax` syscall, `rdi` exit code
+    mov eax, 60
+    xor edi, edi
+    syscall

@@ -9,6 +9,9 @@ _default:
 setup: (_check "npm")
   cd scripts && npm install
 
+docker-amd64:
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD:/data" ubuntu:22.04 bash
+
 build-docker:
   docker build --platform 'linux/amd64' -t count .
 
@@ -175,7 +178,7 @@ build-crystal: (_check "crystal")
 
 build-assembly: (_check "nasm ld")
   nasm -f elf64 count.asm
-  ld count.o -o count -lc -I/lib64/ld-linux-x86-64.so.2
+  ld -s count.o -o count
   echo './count {{i}}' > CMD
 
 build-cobol: (_check "cobc")
