@@ -53,6 +53,8 @@ jobs:
           # - zig
     steps:
       - run: sudo -E apt-get install -y git
+      - run: pwd
+      - run: ls -la
       - run: git clone ${{ github.repositoryUrl }}
       - run: pwd
       - run: ls -la
