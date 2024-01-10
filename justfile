@@ -80,7 +80,8 @@ measure what:
   hyperfine $args --shell=none --export-json "$out" "$(cat CMD)"
   jq '.results[0] | del(.exit_codes)' "$out" | sponge "$out"
   jq '. += {"name":"{{what}}","version":"'"$(cat VERSION)"'"}' "$out" | sponge "$out"
-  timers $(cat CMD) >/dev/null 2> >(jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1')'}' "$out" | sponge "$out")
+  timers $(cat CMD) >/dev/null 2> STATS
+  jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1' ./STATS)'}' "$out" | sponge "$out"
 
 summary results:
   cd scripts && node ./summary.js --results ../results
