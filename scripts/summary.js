@@ -19,6 +19,8 @@ const results = await Promise.all(
     })
 );
 
+const wrap = (s) => `\`${s}\``;
+
 await writeFile(
   'summary.md',
   `
@@ -28,37 +30,56 @@ ${markdownTable(
     ...results
       .slice()
       .sort((a, b) => a.name.localeCompare(b.name))
-      .map(({ name, command, version }) => [name, command, version]),
+      .flatMap(({ name, command, version }) =>
+        version
+          .split('\n')
+          .map((versionLine, i) => [i == 0 ? wrap(name) : '', i == 0 ? wrap(command) : '', versionLine])
+      ),
   ],
   {
     align: ['l', 'l', 'l'],
   }
 )}
 
-${markdownTable(
-  [
-    ['name', 'mean'],
-    ...results
-      .slice()
-      .sort((a, b) => a.mean - b.mean)
-      .map(({ name, mean }) => [name, formatTime(Math.floor(mean * 1_000_000_000), undefined, 5)]),
-  ],
-  {
-    align: ['l', 'r'],
-  }
-)}
+<table>
+<tr>
+  <th>Execution time</th>
+  <th>Max Memory Usage</th>
+</tr>
+<tr>
+<td>
 
 ${markdownTable(
   [
-    ['name', 'max_rss'],
+    ['position', 'name', 'mean'],
+    ...results
+      .slice()
+      .sort((a, b) => a.mean - b.mean)
+      .map(({ name, mean }, i) => [i + 1, wrap(name), formatTime(Math.floor(mean * 1_000_000_000), undefined, 5)]),
+  ],
+  {
+    align: ['c', 'l', 'r'],
+  }
+)}
+
+</td>
+<td>
+
+${markdownTable(
+  [
+    ['position', 'name', 'max_rss'],
     ...results
       .slice()
       .sort((a, b) => a.max_rss - b.max_rss)
-      .map(({ name, max_rss }) => [name, formatSize(max_rss, { minimumFractionDigits: 7 })]),
+      .map(({ name, max_rss }, i) => [i + 1, wrap(name), formatSize(max_rss, { minimumFractionDigits: 7 })]),
   ],
   {
-    align: ['l', 'r'],
+    align: ['c', 'l', 'r'],
   }
 )}
+
+</tr>
+</table>
+
 `.trim()
 );
