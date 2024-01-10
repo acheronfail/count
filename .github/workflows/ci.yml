@@ -56,10 +56,10 @@ jobs:
       - run: pwd
       - run: ls -la
       - run: |
-        cd;
-        git clone ${{ github.repositoryUrl }} count
-        cd count
-        just
+          cd;
+          git clone ${{ github.repositoryUrl }} count
+          cd count
+          just
       # do the thing
       # - run: just test    ${{ matrix.build }}
       # - run: just measure ${{ matrix.build }}
