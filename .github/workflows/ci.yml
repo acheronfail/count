@@ -9,9 +9,6 @@ on:
 
 jobs:
   run:
-    runs-on: ubuntu-latest
-    container:
-      image: acheronfail/count
     strategy:
       fail-fast: false
       matrix:
@@ -49,9 +46,15 @@ jobs:
           # - smalltalk
           # # - tcl
           # - zig
+    runs-on: ubuntu-latest
+    container:
+      image: acheronfail/count
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      # really github? why do you override $HOME?
+      # https://github.com/actions/runner/issues/863
+      - run: 'echo HOME=/root >> $GITHUB_ENV'
       # do the thing
       - run: just test    ${{ matrix.build }}
       - run: just measure ${{ matrix.build }}
