@@ -19,38 +19,38 @@ jobs:
       matrix:
         build:
           - assembly
-          # - bun
-          # - c-gcc
-          # - c-clang
-          # - cpp-gcc
-          # - cpp-clang
-          # - cobol
-          # - coffeescript
-          # - crystal
-          # - csharp
-          # - deno
-          # - erlang
-          # - forth
-          # - fortran
-          # - go
-          # - haskell
-          # - java
-          # - julia
-          # - kotlin
-          # - lua
-          # - nim
-          # - node
-          # - pascal
-          # - perl
-          # - php
-          # - prolog
-          # - python3
-          # - ruby
-          # - rust
-          # - scala
-          # - smalltalk
+          - bun
+          - c-gcc
+          - c-clang
+          - cpp-gcc
+          - cpp-clang
+          - cobol
+          - coffeescript
+          - crystal
+          - csharp
+          - deno
+          - erlang
+          - forth
+          - fortran
+          - go
+          - haskell
+          - java
+          - julia
+          - kotlin
+          - lua
+          - nim
+          - node
+          - pascal
+          - perl
+          - php
+          - prolog
+          - python3
+          - ruby
+          - rust
+          - scala
+          - smalltalk
           # - tcl
-          # - zig
+          - zig
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -60,7 +60,7 @@ jobs:
       # report
       - uses: actions/upload-artifact@v3
         with:
-          path: "${{ matrix.build }}.json"
+          path: "results/${{ matrix.build }}.json"
 
   report:
     needs: ["run"]
