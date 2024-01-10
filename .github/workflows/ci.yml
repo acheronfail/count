@@ -83,8 +83,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.run_number }}
-          body_path: summary.txt
-          files: ../artifact/*.json
+          body_path: scripts/summary.txt
+          files: artifact/*.json
           draft: false
           prerelease: false
       - uses: actions/upload-artifact@v3
