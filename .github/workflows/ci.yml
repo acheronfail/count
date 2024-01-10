@@ -82,7 +82,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ github.run_number }}
+          tag_name: ${{ github.run_number }}
           body_path: summary.txt
           files: ../artifact/*.json
           draft: false
