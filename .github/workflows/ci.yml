@@ -52,6 +52,7 @@ jobs:
           # - tcl
           # - zig
     steps:
+      - run: sudo -E apt-get install -y git
       - run: git clone ${{ github.repositoryUrl }}
       - run: pwd
       - run: ls -la
