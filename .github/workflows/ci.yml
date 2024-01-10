@@ -13,7 +13,7 @@ jobs:
     container:
       image: acheronfail/count
       volumes:
-        - /var/count:/data
+        - /var/count:/var/count
     strategy:
       fail-fast: false
       matrix:
@@ -54,6 +54,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - run: pwd; false
       # do the thing
       - run: just test    ${{ matrix.build }}
       - run: just measure ${{ matrix.build }}

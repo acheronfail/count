@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 RUN curl -fSL https://deb.nodesource.com/setup_lts.x | bash - \
   && apt-get install -y nodejs
 
-RUN curl -fSL https://sh.rustup.rs | sh -s -- -y
+RUN curl -fSL https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
 ENV PATH="/root/.cargo/bin:$PATH"
 
 RUN curl -fSL \
