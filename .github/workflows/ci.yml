@@ -55,12 +55,11 @@ jobs:
       - run: sudo -E apt-get install -y git
       - run: pwd
       - run: ls -la
-      - run: git clone ${{ github.repositoryUrl }}
-      - run: pwd
-      - run: ls -la
-      - run: cd ${{ github.event.repository.name }}
-      - run: pwd
-      - run: ls -la
+      - run: |
+        cd;
+        git clone ${{ github.repositoryUrl }} count
+        cd count
+        just
       # do the thing
       # - run: just test    ${{ matrix.build }}
       # - run: just measure ${{ matrix.build }}
