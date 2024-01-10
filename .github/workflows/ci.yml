@@ -79,6 +79,14 @@ jobs:
           cd scripts
           npm start -- --results ../artifact > summary.txt
           cat summary.txt
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ github.run_number }}
+          body_path: summary.txt
+          files: ../artifact/*.json
+          draft: false
+          prerelease: false
       - uses: actions/upload-artifact@v3
         with:
           path: scripts/summary.txt
