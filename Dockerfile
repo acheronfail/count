@@ -43,6 +43,7 @@ RUN cd && curl -fSL "$(curl -fSL https://ziglang.org/download/index.json | jq -r
   && rm zig.tar.xz
 ENV PATH="/home/runner/.zig:$PATH"
 
-WORKDIR /data
-COPY --chown=runner:runner . .
+WORKDIR /var/count
+COPY --chown=runner:runner justfile justfile
+COPY --chown=runner:runner scripts  scripts
 RUN cd scripts && npm install

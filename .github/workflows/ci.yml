@@ -52,9 +52,12 @@ jobs:
           # - tcl
           # - zig
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - run: git clone ${{ github.repositoryUrl }}
       - run: pwd
+      - run: ls -la
+      - run: cd ${{ github.event.repository.name }}
+      - run: pwd
+      - run: ls -la
       # do the thing
       # - run: just test    ${{ matrix.build }}
       # - run: just measure ${{ matrix.build }}

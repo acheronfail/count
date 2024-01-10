@@ -1,5 +1,6 @@
 i := '1000000000'
 tag := 'acheronfail/count'
+mount := '/var/count'
 
 _default:
   just -l
@@ -11,7 +12,7 @@ setup: (_check "npm")
   cd scripts && npm install
 
 docker-sh: docker-build
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" {{tag}}
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:{{mount}}/results" {{tag}}
 
 # NOTE: there are issues if you try to build this on an arm macbook via rosetta emulation
 # - mono fails to install (https://github.com/mono/mono/issues/21423)
@@ -26,10 +27,10 @@ docker-push: docker-build
   docker push {{tag}}
 
 docker-measure what:
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" {{tag}} just measure {{what}}
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:{{mount}}/results" {{tag}} just measure {{what}}
 
 docker-measure-all:
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:/data/results" {{tag}} just measure-all
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:{{mount}}/results" {{tag}} just measure-all
 
 measure-all:
   #!/usr/bin/env bash
