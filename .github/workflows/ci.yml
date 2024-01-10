@@ -12,13 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: acheronfail/count
-      volumes:
-        - repo:/var/count
     strategy:
       fail-fast: false
       matrix:
         build:
-          - assembly
+          # - assembly
           # - bun
           # - c-gcc
           # - c-clang
@@ -38,7 +36,7 @@ jobs:
           # - julia
           # - kotlin
           # - lua
-          # - nim
+          - nim
           # - node
           # - pascal
           # - perl
@@ -46,7 +44,7 @@ jobs:
           # - prolog
           # - python3
           # - ruby
-          # - rust
+          - rust
           # - scala
           # - smalltalk
           # # - tcl
@@ -54,9 +52,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          path: repo
-      - run: pwd; ls -la; false
       # do the thing
       - run: just test    ${{ matrix.build }}
       - run: just measure ${{ matrix.build }}
