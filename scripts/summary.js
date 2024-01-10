@@ -24,23 +24,6 @@ const wrap = (s) => `\`${s}\``;
 await writeFile(
   'summary.md',
   `
-${markdownTable(
-  [
-    ['name', 'command', 'version'],
-    ...results
-      .slice()
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .flatMap(({ name, command, version }) =>
-        version
-          .split('\n')
-          .map((versionLine, i) => [i == 0 ? wrap(name) : '', i == 0 ? wrap(command) : '', versionLine])
-      ),
-  ],
-  {
-    align: ['l', 'l', 'l'],
-  }
-)}
-
 <table>
 <tr>
   <th>Execution time</th>
@@ -80,6 +63,23 @@ ${markdownTable(
 
 </tr>
 </table>
+
+${markdownTable(
+  [
+    ['name', 'command', 'version'],
+    ...results
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .flatMap(({ name, command, version }) =>
+        version
+          .split('\n')
+          .map((versionLine, i) => [i == 0 ? wrap(name) : '', i == 0 ? wrap(command) : '', versionLine])
+      ),
+  ],
+  {
+    align: ['l', 'l', 'l'],
+  }
+)}
 
 `.trim()
 );
