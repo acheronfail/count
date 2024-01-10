@@ -1,5 +1,8 @@
 {
   "type": "module",
+  "scripts": {
+    "start": "npm install && node summary.js --results ../results"
+  },
   "dependencies": {
     "human-readable": "^0.2.1",
     "minimist": "^1.2.8",

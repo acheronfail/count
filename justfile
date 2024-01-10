@@ -11,8 +11,8 @@ _default:
 setup: (_check "npm")
   cd scripts && npm install
 
-docker-sh: docker-build
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:{{mount}}/results" {{tag}}
+docker-sh:
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}}
 
 # NOTE: there are issues if you try to build this on an arm macbook via rosetta emulation
 # - mono fails to install (https://github.com/mono/mono/issues/21423)
@@ -27,10 +27,10 @@ docker-push: docker-build
   docker push {{tag}}
 
 docker-measure what:
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:{{mount}}/results" {{tag}} just measure {{what}}
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}} just measure {{what}}
 
 docker-measure-all:
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD/results:{{mount}}/results" {{tag}} just measure-all
+  docker run --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}} just measure-all
 
 measure-all:
   #!/usr/bin/env bash
@@ -41,7 +41,7 @@ measure-all:
     just measure "$lang";
   done
 
-  node ./scripts/summary.js --results .
+  cd scripts && npm start
 
 build what:
   rm -f CMD VERSION

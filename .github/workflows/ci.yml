@@ -52,21 +52,15 @@ jobs:
           # - tcl
           # - zig
     steps:
-      - run: sudo -E apt-get install -y git
-      - run: pwd
-      - run: ls -la
-      - run: |
-          cd;
-          git clone ${{ github.repositoryUrl }} count
-          cd count
-          just
+      - name: Checkout
+        uses: actions/checkout@v3
       # do the thing
-      # - run: just test    ${{ matrix.build }}
-      # - run: just measure ${{ matrix.build }}
-      # # report
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     path: "${{ matrix.build }}.json"
+      - run: just test    ${{ matrix.build }}
+      - run: just measure ${{ matrix.build }}
+      # report
+      - uses: actions/upload-artifact@v3
+        with:
+          path: "${{ matrix.build }}.json"
 
   report:
     needs: ["run"]
@@ -82,8 +76,7 @@ jobs:
       - name: Generate Summary
         run: |
           cd scripts
-          npm install
-          node ./summary.js --results ../artifact > summary.txt
+          npm start --results ../artifact > summary.txt
           cat summary.txt
       - uses: actions/upload-artifact@v3
         with:
