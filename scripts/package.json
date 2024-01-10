@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "start": "npm install && node summary.js --results ../results"
+    "start": "npm install && node summary.js"
   },
   "dependencies": {
     "human-readable": "^0.2.1",

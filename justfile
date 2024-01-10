@@ -87,8 +87,8 @@ measure what:
   timers $(cat CMD) >/dev/null 2> STATS
   jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1' ./STATS)'}' "$out" | sponge "$out"
 
-summary results:
-  cd scripts && node ./summary.js --results ../results
+summary:
+  cd scripts && npm start -- --results ../results
 
 test what:
   #!/usr/bin/env bash

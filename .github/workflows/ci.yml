@@ -13,39 +13,39 @@ jobs:
       fail-fast: false
       matrix:
         build:
-          # - assembly
-          # - bun
-          # - c-gcc
-          # - c-clang
-          # - cpp-gcc
-          # - cpp-clang
-          # - cobol
-          # - coffeescript
-          # - crystal
-          # - csharp
-          # - deno
-          # - erlang
-          # - forth
-          # - fortran
-          # - go
-          # - haskell
-          # - java
-          # - julia
-          # - kotlin
-          # - lua
+          - assembly
+          - bun
+          - c-gcc
+          - c-clang
+          - cpp-gcc
+          - cpp-clang
+          - cobol
+          - coffeescript
+          - crystal
+          - csharp
+          - deno
+          - erlang
+          - forth
+          - fortran
+          - go
+          - haskell
+          - java
+          - julia
+          - kotlin
+          - lua
           - nim
-          # - node
-          # - pascal
-          # - perl
-          # - php
-          # - prolog
-          # - python3
-          # - ruby
+          - node
+          - pascal
+          - perl
+          - php
+          - prolog
+          - python3
+          - ruby
           - rust
-          # - scala
-          # - smalltalk
-          # # - tcl
-          # - zig
+          - scala
+          - smalltalk
+          # - tcl
+          - zig
     runs-on: ubuntu-latest
     container:
       image: acheronfail/count
@@ -77,7 +77,7 @@ jobs:
       - name: Generate Summary
         run: |
           cd scripts
-          npm start --results ../artifact > summary.txt
+          npm start -- --results ../artifact > summary.txt
           cat summary.txt
       - uses: actions/upload-artifact@v3
         with:
