@@ -90,8 +90,8 @@ measure what:
   if [[ -f SIZE ]]; then
     jq '. += {"size":"'"$(cat SIZE)"'"}' "$out" | sponge "$out"
   fi
-  timers $(cat CMD) >/dev/null 2> STATS
-  jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1' ./STATS)'}' "$out" | sponge "$out"
+  $(cat CMD) & (pid=$!; sleep 0.2; rg -oPr '$1' 'Rss:\s+(\d+)' /proc/$pid/smaps_rollup) > STATS
+  jq '. += {"max_rss":'$(( $(cat STATS) * 1024 ))'}' "$out" | sponge "$out"
 
 measure-all:
   #!/usr/bin/env bash

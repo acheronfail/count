@@ -2,7 +2,7 @@ name: Do the thing in CI
 
 on:
   push:
-    branches: ["master"]
+    branches: ["master", "proc-smaps"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -88,5 +88,5 @@ jobs:
           tag_name: ${{ github.run_number }}
           body_path: scripts/summary.md
           files: artifact/*.json
-          draft: false
-          prerelease: false
+          draft: ${{ github.ref_name != 'master' }}
+          prerelease: ${{ github.ref_name != 'master' }}
