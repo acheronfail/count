@@ -35,14 +35,14 @@ await writeFile(
 
 ${markdownTable(
   [
-    ['position', 'name', 'mean'],
+    ['#', 'name', 'mean'],
     ...results
       .slice()
       .sort((a, b) => a.mean - b.mean)
       .map(({ name, mean }, i) => [i + 1, wrap(name), formatTime(Math.floor(mean * 1_000_000_000), undefined, 5)]),
   ],
   {
-    align: ['c', 'l', 'r'],
+    align: ['l', 'l', 'r'],
   }
 )}
 
@@ -51,7 +51,7 @@ ${markdownTable(
 
 ${markdownTable(
   [
-    ['position', 'name', 'size'],
+    ['#', 'name', 'size'],
     ...results
       .slice()
       .sort((a, b) => a.name.localeCompare(b.name))
@@ -59,7 +59,7 @@ ${markdownTable(
       .map(({ name, size }, i) => [i + 1, wrap(name), size ? formatSize(size, { minimumFractionDigits: 7 }) : '-']),
   ],
   {
-    align: ['c', 'l', 'r'],
+    align: ['l', 'l', 'r'],
   }
 )}
 
