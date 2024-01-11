@@ -44,7 +44,7 @@ measure-all:
   cd scripts && npm start
 
 build what:
-  rm -f CMD VERSION
+  rm -f count CMD VERSION
   just build-{{what}}
 
 run what:
@@ -82,6 +82,9 @@ measure what:
   hyperfine $args --shell=none --export-json "$out" "$(cat CMD)"
   jq '.results[0] | del(.exit_codes)' "$out" | sponge "$out"
   jq '. += {"name":"{{what}}","version":"'"$(cat VERSION)"'"}' "$out" | sponge "$out"
+  if [ -x count ]; then
+    jq '. += {"size":'"$(stat -c '%s' count)"'}' "$out" | sponge "$out"
+  fi
   timers $(cat CMD) >/dev/null 2> STATS
   jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1' ./STATS)'}' "$out" | sponge "$out"
 
@@ -127,23 +130,23 @@ test what:
 
 build-c-gcc: (_check "gcc")
   gcc --version | head -1 > VERSION
-  gcc -O3 ./count.c
-  echo './a.out {{i}}' > CMD
+  gcc -O3 -o count ./count.c
+  echo './count {{i}}' > CMD
 
 build-c-clang: (_check "clang")
   clang --version | head -1 > VERSION
-  clang -O3 ./count.c
-  echo './a.out {{i}}' > CMD
+  clang -O3 -o count ./count.c
+  echo './count {{i}}' > CMD
 
 build-cpp-gcc: (_check "g++")
   g++ --version | head -1 > VERSION
-  g++ -O3 ./count.cpp
-  echo './a.out {{i}}' > CMD
+  g++ -O3 -o count ./count.cpp
+  echo './count {{i}}' > CMD
 
 build-cpp-clang: (_check "clang++")
   clang++ --version | head -1 > VERSION
-  clang++ -O3 ./count.cpp
-  echo './a.out {{i}}' > CMD
+  clang++ -O3 -o count ./count.cpp
+  echo './count {{i}}' > CMD
 
 build-rust: (_check "rustc")
   rustc --version > VERSION
@@ -152,8 +155,8 @@ build-rust: (_check "rustc")
 
 build-fortran: (_check "gfortran")
   gfortran --version | head -1 > VERSION
-  gfortran -O3 ./count.f90
-  echo './a.out {{i}}' > CMD
+  gfortran -O3 -o count ./count.f90
+  echo './count {{i}}' > CMD
 
 build-java: (_check "javac java")
   javac --version > VERSION

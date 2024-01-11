@@ -27,7 +27,8 @@ await writeFile(
 <table>
 <tr>
   <th>Execution time</th>
-  <th>Max Memory Usage</th>
+  <th>Binary size</th>
+  <th>Max Memory Usage*</th>
 </tr>
 <tr>
 <td>
@@ -50,6 +51,23 @@ ${markdownTable(
 
 ${markdownTable(
   [
+    ['position', 'name', 'size'],
+    ...results
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => (a.size ?? Infinity) - (b.size ?? Infinity))
+      .map(({ name, size }, i) => [i + 1, wrap(name), size ? formatSize(size, { minimumFractionDigits: 7 }) : '-']),
+  ],
+  {
+    align: ['c', 'l', 'r'],
+  }
+)}
+
+</td>
+<td>
+
+${markdownTable(
+  [
     ['position', 'name', 'max_rss'],
     ...results
       .slice()
@@ -61,6 +79,7 @@ ${markdownTable(
   }
 )}
 
+</td>
 </tr>
 </table>
 
