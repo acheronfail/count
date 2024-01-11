@@ -83,6 +83,9 @@ ${markdownTable(
 </tr>
 </table>
 
+> \`*\`: Getting the \`max_rss\` isn't 100% reliable for very small binary sizes
+> this appears to be [a limitation of the linux kernel](https://github.com/acheronfail/timeRS/blob/master/LIMITATIONS.md).
+
 ${markdownTable(
   [
     ['name', 'command', 'version'],
