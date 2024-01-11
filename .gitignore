@@ -3,6 +3,7 @@ results/*.json
 *.out
 *.dump
 *.beam
+*.tasty
 *.class
 *.json
 *.o
@@ -16,3 +17,4 @@ scripts/summary.md
 CMD
 VERSION
 STATS
+SIZE

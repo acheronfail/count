@@ -10,12 +10,23 @@ const args = minimist(process.argv.slice(2));
 const resultsDir = args.results;
 if (!resultsDir) throw new Error('Please pass --results');
 
+const SIZE_T_BINARY = 'binary';
+const sizeTypes = new Set([SIZE_T_BINARY]);
 const results = await Promise.all(
   readdirSync(resultsDir)
     .filter((name) => name.endsWith('.json'))
     .map(async (name) => {
       const text = await readFile(join(resultsDir, name), 'utf-8');
-      return JSON.parse(text);
+      const json = JSON.parse(text);
+
+      if ('size' in json) {
+        const [bytes, type] = json.size.split('\n');
+        json.size = parseInt(bytes);
+        json.sizeType = type ?? SIZE_T_BINARY;
+        sizeTypes.add(json.sizeType);
+      }
+
+      return json;
     })
 );
 
@@ -27,8 +38,8 @@ await writeFile(
 <table>
 <tr>
   <th>Execution time</th>
-  <th>Binary size</th>
-  <th>Max Memory Usage*</th>
+  <th>Binary size<sup>1</sup></th>
+  <th>Max Memory Usage<sup>2</sup></th>
 </tr>
 <tr>
 <td>
@@ -49,19 +60,30 @@ ${markdownTable(
 </td>
 <td>
 
-${markdownTable(
-  [
-    ['#', 'name', 'size'],
-    ...results
-      .slice()
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .sort((a, b) => (a.size ?? Infinity) - (b.size ?? Infinity))
-      .map(({ name, size }, i) => [i + 1, wrap(name), size ? formatSize(size, { minimumFractionDigits: 7 }) : '-']),
-  ],
-  {
-    align: ['l', 'l', 'r'],
-  }
-)}
+${[...sizeTypes.values()]
+  .map(
+    (sizeType) =>
+      `**${sizeType}**:\n` +
+      markdownTable(
+        [
+          ['#', 'name', 'size'],
+          ...results
+            .slice()
+            .filter((x) => x.sizeType === sizeType)
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .sort((a, b) => (a.size ?? Infinity) - (b.size ?? Infinity))
+            .map(({ name, size }, i) => [
+              i + 1,
+              wrap(name),
+              size ? formatSize(size, { minimumFractionDigits: 7 }) : '-',
+            ]),
+        ],
+        {
+          align: ['l', 'l', 'r'],
+        }
+      )
+  )
+  .join('\n\n')}
 
 </td>
 <td>
@@ -83,8 +105,8 @@ ${markdownTable(
 </tr>
 </table>
 
-> \`*\`: Getting the \`max_rss\` isn't 100% reliable for very small binary sizes
-> this appears to be [a limitation of the linux kernel](https://github.com/acheronfail/timeRS/blob/master/LIMITATIONS.md).
+> - <sup>1</sup>: only includes compiled files (i.e., does not include runtimes or libraries required for execution)
+> - <sup>2</sup>: Getting the \`max_rss\` isn't 100% reliable for very small binary sizes. This appears to be [a limitation of the linux kernel](https://github.com/acheronfail/timeRS/blob/master/LIMITATIONS.md).
 
 ${markdownTable(
   [
