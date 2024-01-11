@@ -162,13 +162,13 @@ build-java: (_check "javac java")
   echo 'java count {{i}}' > CMD
 
 build-scala: (_check "scalac scala")
-  scalac -version > VERSION
-  scala -version >> VERSION
+  scalac -version > VERSION 2>&1
+  scala -version >> VERSION 2>&1
   scalac count.scala
   echo 'scala count {{i}}' > CMD
 
 build-kotlin: (_check "kotlinc java")
-  kotlinc -version > VERSION
+  kotlinc -version > VERSION 2>&1
   java --version | head -1 >> VERSION
   kotlinc count.kt -include-runtime -d count.jar
   echo 'java -jar count.jar {{i}}' > CMD
@@ -272,7 +272,7 @@ build-lua: (_check "lua")
   echo 'lua ./count.lua {{i}}' > CMD
 
 build-forth: (_check "gforth")
-  gforth --version > VERSION
+  gforth --version > VERSION 2>&1
   echo 'gforth ./count.fth {{i}}' > CMD
 
 build-csharp: (_check "mcs mono")

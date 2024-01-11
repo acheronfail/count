@@ -77,7 +77,7 @@ ${markdownTable(
       ),
   ],
   {
-    align: ['l', 'l', 'l'],
+    align: ['l', 'r', 'l'],
   }
 )}
 
