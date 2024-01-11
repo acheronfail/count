@@ -68,14 +68,14 @@ ${markdownTable(
 
 ${markdownTable(
   [
-    ['position', 'name', 'max_rss'],
+    ['#', 'name', 'max_rss'],
     ...results
       .slice()
       .sort((a, b) => a.max_rss - b.max_rss)
       .map(({ name, max_rss }, i) => [i + 1, wrap(name), formatSize(max_rss, { minimumFractionDigits: 7 })]),
   ],
   {
-    align: ['c', 'l', 'r'],
+    align: ['l', 'l', 'r'],
   }
 )}
 
