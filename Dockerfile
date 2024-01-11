@@ -3,7 +3,7 @@ FROM ubuntu:latest
 ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
 
 RUN apt-get update && apt-get install -y \
-  build-essential clang coffeescript curl default-jdk default-jre erlang \
+  bc build-essential clang coffeescript curl default-jdk default-jre erlang \
   fp-compiler gdb lldb gforth gfortran git gnu-smalltalk gnucobol3 golang \
   haskell-platform jq kotlin lua5.4 mono-complete moreutils nasm php ruby \
   scala swi-prolog tar tcl unzip wget xz-utils \
