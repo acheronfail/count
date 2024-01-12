@@ -39,7 +39,7 @@ await writeFile(
 <tr>
   <th>Execution time</th>
   <th>Binary size<sup>1</sup></th>
-  <th>Max Memory Usage<sup>2</sup></th>
+  <th>Max Memory Usage</th>
 </tr>
 <tr>
 <td>
@@ -90,11 +90,11 @@ ${[...sizeTypes.values()]
 
 ${markdownTable(
   [
-    ['#', 'name', 'max_rss'],
+    ['#', 'name', 'rss'],
     ...results
       .slice()
-      .sort((a, b) => a.max_rss - b.max_rss)
-      .map(({ name, max_rss }, i) => [i + 1, wrap(name), formatSize(max_rss, { minimumFractionDigits: 7 })]),
+      .sort((a, b) => a.rss - b.rss)
+      .map(({ name, rss }, i) => [i + 1, wrap(name), formatSize(rss, { minimumFractionDigits: 7 })]),
   ],
   {
     align: ['l', 'l', 'r'],
@@ -106,7 +106,6 @@ ${markdownTable(
 </table>
 
 > - <sup>1</sup>: only includes compiled files (i.e., does not include runtimes or libraries required for execution)
-> - <sup>2</sup>: Getting the \`max_rss\` isn't 100% reliable for very small binary sizes. This appears to be [a limitation of the linux kernel](https://github.com/acheronfail/timeRS/blob/master/LIMITATIONS.md).
 
 ${markdownTable(
   [

@@ -90,8 +90,9 @@ measure what:
   if [[ -f SIZE ]]; then
     jq '. += {"size":"'"$(cat SIZE)"'"}' "$out" | sponge "$out"
   fi
-  timers $(cat CMD) >/dev/null 2> STATS
-  jq '. += {"max_rss":'$(rg -oP '(?:max_rss:\s*)(\d+)' -r '$1' ./STATS)'}' "$out" | sponge "$out"
+
+  gdb -return-child-result --command rss.gdb --args $(cat CMD) >/dev/null
+  jq '. += {"rss":'$(( $(rg -oPr '$1' 'Rss:\s*(\d+)' ./rss.txt) * 1024 ))'}' "$out" | sponge "$out"
 
 measure-all:
   #!/usr/bin/env bash

@@ -47,8 +47,7 @@ program_header:                   ; Elf64_Phdr
     output db 10 dup(0), 10 ; max 32bit number is 10 digits (decimal) long, followed by newline
 
 _start:                 ; argc is at `rsp`, argv is at `rsp + 8`
-    mov rdi, [rsp + 8]  ; put argv into `rdi`
-    add rdi, 8          ; skip the first argument (program name)
+    mov rdi, [rsp + 16] ; put argv[1] into `rdi` (+ 8 to skip argv[0])
 
     xor rcx, rcx        ; zero
     xor rax, rax        ; zero
