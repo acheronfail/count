@@ -27,10 +27,10 @@ docker-push: docker-build
   docker push {{tag}}
 
 docker-measure what:
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}} just measure {{what}}
+  docker run --privileged --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}} just measure {{what}}
 
 docker-measure-all:
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}} just measure-all
+  docker run --privileged --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}} just measure-all
 
 _all:
   just -l | grep -v 'build-all' | grep 'build-' | cut -d'-' -f2- | xargs
@@ -58,7 +58,7 @@ run what:
 
 measure what:
   #!/usr/bin/env bash
-  set -euxo pipefail
+  set -euo pipefail
   just build {{what}}
   slow_langs=(
     cobol
@@ -81,6 +81,8 @@ measure what:
       fi
   done
 
+  set -x
+
   mkdir -p results
   out="results/{{what}}.json"
 
@@ -91,7 +93,7 @@ measure what:
     jq '. += {"size":"'"$(cat SIZE)"'"}' "$out" | sponge "$out"
   fi
 
-  gdb -return-child-result --command rss.gdb --args $(cat CMD) >/dev/null
+  gdb --command rss.gdb --args $(cat CMD) >/dev/null
   jq '. += {"rss":'$(( $(rg -oPr '$1' 'Rss:\s*(\d+)' ./rss.txt) * 1024 ))'}' "$out" | sponge "$out"
 
 measure-all:
@@ -200,7 +202,7 @@ build-scala: (_check "scalac scala") && (_size "count.class" "count$.class" "cou
   scalac -version > VERSION 2>&1
   scala -version >> VERSION 2>&1
   scalac count.scala
-  echo 'scala count {{i}}' > CMD
+  echo 'bash '$(which scala)' count {{i}}' > CMD
 
 build-kotlin: (_check "kotlinc java") && (_size "count.jar") (_sizet "bytecode")
   kotlinc -version > VERSION 2>&1
@@ -254,7 +256,7 @@ build-php: (_check "php")
 build-erlang: (_check "erlc erl") && (_size "count.beam") (_sizet "bytecode")
   erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])), io:fwrite(Version), halt().' -noshell > VERSION
   erlc count.erl
-  echo 'erl -noshell -s count start {{i}}' > CMD
+  echo 'sh '$(which erl)' -noshell -s count start {{i}}' > CMD
 
 build-crystal: (_check "crystal")
   crystal version | xargs > VERSION
@@ -277,7 +279,7 @@ build-julia: (_check "julia")
 
 build-coffeescript: (_check "coffee")
   coffee --version > VERSION
-  echo 'coffee ./count.coffee {{i}}' > CMD
+  echo 'node '$(which coffee)' ./count.coffee {{i}}' > CMD
 
 build-nim: (_check "nim") && (_size "count")
   nim --version | head -1 > VERSION
@@ -287,7 +289,7 @@ build-nim: (_check "nim") && (_size "count")
 build-prolog: (_check "swipl") && (_size "count")
   swipl --version > VERSION
   swipl -s count.pro -g "main" -t halt -- 1
-  echo './count {{i}}' > CMD
+  echo 'sh ./count {{i}}' > CMD
 
 build-smalltalk: (_check "gst")
   gst --version | head -1 > VERSION
