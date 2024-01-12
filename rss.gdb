@@ -2,7 +2,13 @@
 
 # catch program exit
 catch syscall exit exit_group
-condition 1 $_thread == 1
+python
+# NOTE: for some reason we can't catch erlang's exit on its main thread, so we
+# just catch the first exit. This is okay: testing locally shows that the count
+# is completed before the first thread exits.
+if not '/erl' in gdb.execute("show args", to_string=True):
+  gdb.execute("condition 1 $_thread == 1")
+end
 run
 
 # capture program pid
