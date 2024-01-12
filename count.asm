@@ -8,7 +8,10 @@
 
 BITS 64
 
-    org     0x08048000
+; Needs to be page aligned - there is some historical reasons why it's usually
+; set to 0x08048000 but it's not required. From my testing 0x10000 is the lowest
+; value I can set it to without the program segfaulting.
+    org     0x10000
 
 elf_header:                       ; Elf64_Ehdr
     db      0x7F, "ELF"           ;   e_ident[ei_mag0 - ei_mag3]
