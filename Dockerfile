@@ -20,7 +20,7 @@ RUN curl -fSL \
 RUN cargo install ripgrep --features pcre2
 RUN cargo binstall --no-confirm hyperfine just timers juliaup
 
-RUN juliaup add release
+RUN juliaup add release && juliaup config versionsdbupdateinterval 0
 
 RUN curl -fSL https://bun.sh/install | bash
 ENV PATH="/root/.bun/bin:$PATH"
