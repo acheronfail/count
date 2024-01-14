@@ -14,39 +14,39 @@ jobs:
       matrix:
         # do the slow ones first, to make the overall build quicker
         build:
-          # - 00 tcl
-          - 01 prolog
-          - 02 smalltalk
-          - 03 python3
-          - 04 julia
-          - 05 perl
-          - 06 cobol
-          - 07 haskell
-          - 08 ruby
-          - 09 forth
-          - 10 lua
-          - 11 php
-          - 12 erlang
-          - 13 crystal
-          - 14 scala
-          - 15 csharp
-          - 16 coffeescript
-          - 17 kotlin
-          - 18 java
-          - 19 deno
-          - 20 node
-          - 21 go
-          - 22 bun
-          - 23 fortran
-          - 24 rust
-          - 25 cpp-clang
-          - 26 cpp-gcc
-          - 27 c-clang
-          - 28 c-gcc
-          - 29 nim
-          - 30 pascal
-          - 31 zig
-          - 32 assembly
+          # - 00_tcl
+          - 01_prolog
+          - 02_smalltalk
+          - 03_python3
+          - 04_julia
+          - 05_perl
+          - 06_cobol
+          - 07_haskell
+          - 08_ruby
+          - 09_forth
+          - 10_lua
+          - 11_php
+          - 12_erlang
+          - 13_crystal
+          - 14_scala
+          - 15_csharp
+          - 16_coffeescript
+          - 17_kotlin
+          - 18_java
+          - 19_deno
+          - 20_node
+          - 21_go
+          - 22_bun
+          - 23_fortran
+          - 24_rust
+          - 25_cpp-clang
+          - 26_cpp-gcc
+          - 27_c-clang
+          - 28_c-gcc
+          - 29_nim
+          - 30_pascal
+          - 31_zig
+          - 32_assembly
     runs-on: ubuntu-latest
     container:
       image: acheronfail/count
@@ -55,14 +55,18 @@ jobs:
         uses: actions/checkout@v3
       # really github? why do you override $HOME?
       # https://github.com/actions/runner/issues/863
-      - run: 'echo HOME=/root >> $GITHUB_ENV'
+      - name: Setup environment
+        run: |
+          echo HOME=/root >> $GITHUB_ENV
+          WHAT=${{ matrix.build }}
+          echo WHAT=${WHAT##*_} >> $GITHUB_ENV
       # do the thing
-      - run: just test    ${{ matrix.build }}
-      - run: just measure ${{ matrix.build }}
+      - run: just test    ${{ env.WHAT }}
+      - run: just measure ${{ env.WHAT }}
       # report
       - uses: actions/upload-artifact@v3
         with:
-          path: 'results/${{ matrix.build }}.json'
+          path: 'results/${{ env.WHAT }}.json'
 
   report:
     needs: ['run']
