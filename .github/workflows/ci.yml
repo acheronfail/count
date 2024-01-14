@@ -2,7 +2,7 @@ name: Do the thing in CI
 
 on:
   push:
-    branches: ["master"]
+    branches: ['master']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -14,39 +14,39 @@ jobs:
       matrix:
         # do the slow ones first, to make the overall build quicker
         build:
-          # - tcl
-          - prolog
-          - smalltalk
-          - python3
-          - julia
-          - perl
-          - cobol
-          - haskell
-          - ruby
-          - forth
-          - lua
-          - php
-          - erlang
-          - crystal
-          - scala
-          - csharp
-          - coffeescript
-          - kotlin
-          - java
-          - deno
-          - node
-          - go
-          - bun
-          - fortran
-          - rust
-          - cpp-clang
-          - cpp-gcc
-          - c-clang
-          - c-gcc
-          - nim
-          - pascal
-          - zig
-          - assembly
+          # - 00 tcl
+          - 01 prolog
+          - 02 smalltalk
+          - 03 python3
+          - 04 julia
+          - 05 perl
+          - 06 cobol
+          - 07 haskell
+          - 08 ruby
+          - 09 forth
+          - 10 lua
+          - 11 php
+          - 12 erlang
+          - 13 crystal
+          - 14 scala
+          - 15 csharp
+          - 16 coffeescript
+          - 17 kotlin
+          - 18 java
+          - 19 deno
+          - 20 node
+          - 21 go
+          - 22 bun
+          - 23 fortran
+          - 24 rust
+          - 25 cpp-clang
+          - 26 cpp-gcc
+          - 27 c-clang
+          - 28 c-gcc
+          - 29 nim
+          - 30 pascal
+          - 31 zig
+          - 32 assembly
     runs-on: ubuntu-latest
     container:
       image: acheronfail/count
@@ -62,10 +62,10 @@ jobs:
       # report
       - uses: actions/upload-artifact@v3
         with:
-          path: "results/${{ matrix.build }}.json"
+          path: 'results/${{ matrix.build }}.json'
 
   report:
-    needs: ["run"]
+    needs: ['run']
     runs-on: ubuntu-latest
     permissions:
       # needed for creating the github release
