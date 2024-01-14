@@ -12,40 +12,41 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # do the slow ones first, to make the overall build quicker
         build:
-          - assembly
-          - bun
-          - c-gcc
-          - c-clang
-          - cpp-gcc
-          - cpp-clang
-          - cobol
-          - coffeescript
-          - crystal
-          - csharp
-          - deno
-          - erlang
-          - forth
-          - fortran
-          - go
-          - haskell
-          - java
-          - julia
-          - kotlin
-          - lua
-          - nim
-          - node
-          - pascal
-          - perl
-          - php
-          - prolog
-          - python3
-          - ruby
-          - rust
-          - scala
-          - smalltalk
           # - tcl
+          - prolog
+          - smalltalk
+          - python3
+          - julia
+          - perl
+          - cobol
+          - haskell
+          - ruby
+          - forth
+          - lua
+          - php
+          - erlang
+          - crystal
+          - scala
+          - csharp
+          - coffeescript
+          - kotlin
+          - java
+          - deno
+          - node
+          - go
+          - bun
+          - fortran
+          - rust
+          - cpp-clang
+          - cpp-gcc
+          - c-clang
+          - c-gcc
+          - nim
+          - pascal
           - zig
+          - assembly
     runs-on: ubuntu-latest
     container:
       image: acheronfail/count
@@ -88,5 +89,5 @@ jobs:
           tag_name: ${{ github.run_number }}
           body_path: scripts/summary.md
           files: artifact/*.json
-          draft: false
-          prerelease: false
+          draft: ${{ github.ref_name != 'master' }}
+          prerelease: ${{ github.ref_name != 'master' }}
