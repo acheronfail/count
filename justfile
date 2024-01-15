@@ -192,7 +192,7 @@ build-fortran: (_check "gfortran") && (_size "./count")
   gfortran -O3 -o count ./count.f90
   echo './count {{i}}' > CMD
 
-build-java: (_check "javac java") && (_size "./count.java") (_sizet "bytecode")
+build-java: (_check "javac java") && (_size "./count.class") (_sizet "bytecode")
   javac --version > VERSION
   java --version | head -1 >> VERSION
   javac count.java
