@@ -93,8 +93,8 @@ measure what:
     jq '. += {"size":"'"$(cat SIZE)"'"}' "$out" | sponge "$out"
   fi
 
-  max_rss $(cat CMD)
-  jq '. += {"rss":'$(jq '.max_rss' ./max_rss.json)'}' "$out" | sponge "$out"
+  max_rss -o STATS -- $(cat CMD)
+  jq '. += {"rss":'$(jq '.max_rss' STATS)'}' "$out" | sponge "$out"
 
 measure-all:
   #!/usr/bin/env bash
