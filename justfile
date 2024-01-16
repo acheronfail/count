@@ -94,7 +94,7 @@ measure what:
   fi
 
   max_rss -o STATS -- $(cat CMD)
-  jq '. += {"rss":'$(jq '.max_rss' STATS)'}' "$out" | sponge "$out"
+  jq '. += {"max_rss": '$(cat STATS)'}' "$out" | sponge "$out"
 
 measure-all:
   #!/usr/bin/env bash

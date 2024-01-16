@@ -93,8 +93,8 @@ ${markdownTable(
     ['#', 'name', 'rss'],
     ...results
       .slice()
-      .sort((a, b) => a.rss - b.rss)
-      .map(({ name, rss }, i) => [i + 1, wrap(name), formatSize(rss, { minimumFractionDigits: 7 })]),
+      .sort((a, b) => a.max_rss.max_rss - b.max_rss.max_rss)
+      .map(({ name, max_rss }, i) => [i + 1, wrap(name), formatSize(max_rss.max_rss, { minimumFractionDigits: 7 })]),
   ],
   {
     align: ['l', 'l', 'r'],
