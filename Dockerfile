@@ -41,6 +41,6 @@ RUN cd && curl -fSL "$(curl -fSL https://ziglang.org/download/index.json | jq -r
   && rm zig.tar.xz
 ENV PATH="/root/.zig:$PATH"
 
-RUN cargo install max_rss --version 0.3.2
+RUN cargo install max_rss --version 0.3.3
 
 WORKDIR /var/count
