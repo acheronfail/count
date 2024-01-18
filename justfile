@@ -26,6 +26,9 @@ docker-pull:
 docker-push: docker-build
   docker push {{tag}}
 
+docker-run what:
+  docker run --privileged --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}} just run {{what}}
+
 docker-measure what:
   docker run --privileged --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}} just measure {{what}}
 
