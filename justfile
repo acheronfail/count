@@ -324,3 +324,8 @@ build-csharp: (_check "mcs mono") && (_size "count.exe") (_sizet "bytecode")
 build-ocaml: (_check "ocaml")
   ocaml --version > VERSION
   echo 'ocaml ./count.ml {{i}}' > CMD
+
+build-vala: (_check "valac") && (_size "count")
+  valac --version > VERSION
+  valac ./count.vala -o count --Xcc=-O3
+  echo './count {{i}}' > CMD

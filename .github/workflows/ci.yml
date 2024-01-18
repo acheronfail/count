@@ -40,15 +40,15 @@ jobs:
           - 23_bun
           - 24_fortran
           - 25_rust
-          - 26_cpp-clang
-          - 27_cpp-gcc
-          - 28_c-clang
-          - 29_c-gcc
-          - 30_nim
-          - 31_pascal
-          - 32_zig
-          - 33_assembly
-          - 34_ocaml
+          - 26_vala
+          - 27_cpp-clang
+          - 28_cpp-gcc
+          - 29_c-clang
+          - 30_c-gcc
+          - 31_nim
+          - 32_pascal
+          - 33_zig
+          - 34_assembly
     runs-on: ubuntu-latest
     container:
       image: acheronfail/count
