@@ -16,7 +16,7 @@ docker-sh:
 
 # NOTE: there are issues if you try to build this on an arm macbook via rosetta emulation
 # - mono fails to install (https://github.com/mono/mono/issues/21423)
-# - getting erlang version segfaults
+# - running anything with erlang segfaults
 docker-build:
   docker build --progress=plain --platform 'linux/amd64' -t {{tag}} .
 
@@ -320,3 +320,7 @@ build-csharp: (_check "mcs mono") && (_size "count.exe") (_sizet "bytecode")
   mono --version | head -1 >> VERSION
   mcs -o+ ./count.cs
   echo 'mono ./count.exe {{i}}' > CMD
+
+build-ocaml: (_check "ocaml")
+  ocaml --version > VERSION
+  echo 'ocaml ./count.ml {{i}}' > CMD

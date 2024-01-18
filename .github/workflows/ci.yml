@@ -25,28 +25,30 @@ jobs:
           - 08_ruby
           - 09_forth
           - 10_lua
-          - 11_php
-          - 12_erlang
-          - 13_crystal
-          - 14_scala
-          - 15_csharp
-          - 16_coffeescript
-          - 17_kotlin
-          - 18_java
-          - 19_deno
-          - 20_node
-          - 21_go
-          - 22_bun
-          - 23_fortran
-          - 24_rust
-          - 25_cpp-clang
-          - 26_cpp-gcc
-          - 27_c-clang
-          - 28_c-gcc
-          - 29_nim
-          - 30_pascal
-          - 31_zig
-          - 32_assembly
+          - 11_ocaml
+          - 12_php
+          - 13_erlang
+          - 14_crystal
+          - 15_scala
+          - 16_csharp
+          - 17_coffeescript
+          - 18_kotlin
+          - 19_java
+          - 20_deno
+          - 21_node
+          - 22_go
+          - 23_bun
+          - 24_fortran
+          - 25_rust
+          - 26_cpp-clang
+          - 27_cpp-gcc
+          - 28_c-clang
+          - 29_c-gcc
+          - 30_nim
+          - 31_pascal
+          - 32_zig
+          - 33_assembly
+          - 34_ocaml
     runs-on: ubuntu-latest
     container:
       image: acheronfail/count

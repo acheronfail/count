@@ -5,8 +5,8 @@ ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
 RUN apt-get update && apt-get install -y \
   bc build-essential clang curl default-jdk default-jre erlang fp-compiler gdb \
   ghc lldb gforth gfortran git gnu-smalltalk gnucobol3 golang jq kotlin lua5.4 \
-  mono-complete moreutils nasm php ruby scala swi-prolog tar tcl unzip wget \
-  xz-utils \
+  mono-complete moreutils nasm ocaml php ruby scala swi-prolog tar tcl unzip \
+  wget xz-utils \
   && apt-get clean
 RUN curl -fSL https://deb.nodesource.com/setup_lts.x | bash - \
   && apt-get install -y nodejs \
@@ -41,6 +41,6 @@ RUN cd && curl -fSL "$(curl -fSL https://ziglang.org/download/index.json | jq -r
   && rm zig.tar.xz
 ENV PATH="/root/.zig:$PATH"
 
-RUN cargo install max_rss --version 0.4.0
+RUN cargo install max_rss --version 0.4.1
 
 WORKDIR /var/count
