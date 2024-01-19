@@ -18,7 +18,7 @@ docker-sh:
 # - mono fails to install (https://github.com/mono/mono/issues/21423)
 # - running anything with erlang segfaults
 docker-build:
-  docker build --progress=plain --platform 'linux/amd64' -t {{tag}} .
+  docker build --progress=plain --platform 'linux/amd64' -t {{tag}} ./docker
 
 docker-pull:
   docker pull {{tag}}
@@ -73,12 +73,13 @@ measure what:
     python
     ruby
     smalltalk
+    swift
     tcl
   )
 
   args="--warmup 3"
   for language in "${slow_langs[@]}"; do
-      if [[ "{{what}}" == *"$language"* ]]; then
+      if [[ "{{what}}" == "$language" ]]; then
           args="--runs 1"
           break
       fi
@@ -328,4 +329,13 @@ build-ocaml: (_check "ocaml")
 build-vala: (_check "valac") && (_size "count")
   valac --version > VERSION
   valac ./count.vala -o count --Xcc=-O3
+  echo './count {{i}}' > CMD
+
+build-swift: (_check "swift")
+  swift --version > VERSION
+  echo 'swift ./count.swift {{i}}' > CMD
+
+build-swiftc: (_check "swiftc") && (_size "count")
+  swiftc --version > VERSION
+  swiftc ./count.swift -o count -O
   echo './count {{i}}' > CMD

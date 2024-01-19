@@ -38,7 +38,7 @@ RUN curl -fSL \
   https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh \
   | bash
 RUN cargo install ripgrep --features pcre2
-RUN cargo binstall --no-confirm hyperfine just timers juliaup
+RUN cargo binstall --no-confirm hyperfine just max_rss juliaup
 
 RUN juliaup add release && juliaup config versionsdbupdateinterval 0
 
@@ -53,13 +53,12 @@ RUN curl -fSL https://crystal-lang.org/install.sh | bash -s -- --version=1.11
 RUN curl -fSL https://nim-lang.org/choosenim/init.sh | sh -s -- -y
 ENV PATH="/root/.nimble/bin:$PATH"
 
-RUN cd && curl -fSL "$(curl -fSL https://ziglang.org/download/index.json | jq -r '.[keys_unsorted[1]]["x86_64-linux"].tarball')" \
-    > zig.tar.xz \
-  && mkdir -p "/root/.zig" \
-  && tar -xvf zig.tar.xz --strip-components=1 -C "/root/.zig" \
-  && rm zig.tar.xz
+COPY ./zig.sh ./zig.sh
+RUN ./zig.sh
 ENV PATH="/root/.zig:$PATH"
 
-RUN cargo install max_rss --version 0.4.1
+COPY ./swift.sh ./swift.sh
+RUN ./swift.sh
+ENV PATH="/root/.swift/usr/bin:$PATH"
 
 WORKDIR /var/count

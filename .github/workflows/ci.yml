@@ -14,41 +14,43 @@ jobs:
       matrix:
         # do the slow ones first, to make the overall build quicker
         build:
-          # - 00_tcl
-          - 01_prolog
-          - 02_smalltalk
-          - 03_python3
-          - 04_julia
-          - 05_perl
-          - 06_cobol
-          - 07_haskell
-          - 08_ruby
-          - 09_forth
-          - 10_lua
-          - 11_ocaml
-          - 12_php
-          - 13_erlang
-          - 14_crystal
-          - 15_scala
-          - 16_csharp
-          - 17_coffeescript
-          - 18_kotlin
-          - 19_java
-          - 20_deno
-          - 21_node
-          - 22_go
-          - 23_bun
-          - 24_fortran
-          - 25_rust
-          - 26_vala
-          - 27_cpp-clang
-          - 28_cpp-gcc
-          - 29_c-clang
-          - 30_c-gcc
-          - 31_nim
-          - 32_pascal
-          - 33_zig
-          - 34_assembly
+          # - tcl
+          - prolog
+          - smalltalk
+          - python3
+          - julia
+          - perl
+          - swift
+          - cobol
+          - ruby
+          - haskell
+          - forth
+          - lua
+          - ocaml
+          - php
+          - erlang
+          - crystal
+          - scala
+          - csharp
+          - coffeescript
+          - kotlin
+          - java
+          - deno
+          - node
+          - go
+          - bun
+          - fortran
+          - rust
+          - swiftc
+          - vala
+          - cpp-clang
+          - cpp-gcc
+          - c-clang
+          - c-gcc
+          - nim
+          - pascal
+          - zig
+          - assembly
     runs-on: ubuntu-latest
     container:
       image: acheronfail/count
