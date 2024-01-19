@@ -61,4 +61,9 @@ COPY ./swift.sh ./swift.sh
 RUN ./swift.sh
 ENV PATH="/root/.swift/usr/bin:$PATH"
 
+ENV PATH="/root/.local/share/ponyup/bin:$PATH"
+RUN (curl -fSL https://raw.githubusercontent.com/ponylang/ponyup/latest-release/ponyup-init.sh | sh) || true \
+  && ponyup default x86_64-linux-ubuntu22.04 \
+  && ponyup update ponyc release
+
 WORKDIR /var/count

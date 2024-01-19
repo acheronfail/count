@@ -339,3 +339,8 @@ build-swiftc: (_check "swiftc") && (_size "count")
   swiftc --version > VERSION
   swiftc ./count.swift -o count -O
   echo './count {{i}}' > CMD
+
+build-pony: (_check "ponyc") && (_size "count")
+  ponyc --version > VERSION
+  ponyc
+  echo './count {{i}}' > CMD

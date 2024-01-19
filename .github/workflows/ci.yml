@@ -39,6 +39,7 @@ jobs:
           - node
           - go
           - bun
+          - pony
           - fortran
           - rust
           - swiftc
