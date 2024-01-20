@@ -12,7 +12,7 @@ setup: (_check "npm")
   cd scripts && npm install
 
 docker-sh:
-  docker run --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}}
+  docker run --net host --rm -ti --platform 'linux/amd64' -v "$PWD:{{mount}}" {{tag}}
 
 # NOTE: there are issues if you try to build this on an arm macbook via rosetta emulation
 # - mono fails to install (https://github.com/mono/mono/issues/21423)
