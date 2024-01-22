@@ -57,7 +57,12 @@ _start:                 ; argc is at `rsp`, argv is at `rsp + 8`
 from_decimal_loop:
     movzx rdx, byte [rdi + rcx]
     sub rdx, '0'
-    imul rax, rax, 10
+
+    mov rbx, rax
+    shl rax, 3
+    shl rbx, 1
+    add rax, rbx
+
     add rax, rdx
     inc rcx
     cmp byte [rdi + rcx], 0
@@ -85,7 +90,7 @@ to_decimal_loop:
 
 write:                   ; args: `rax` syscall, `rdi` fd, `rsi` buf, `rdx` length
     mov rax, 1
-    mov rdi, 1
+    mov rdi, rax
     lea rdx, [output+11]
     sub rdx, rsi
     syscall
