@@ -59,7 +59,7 @@ run what:
   just build {{what}}
   @$(cat CMD)
 
-measure what:
+measure what: (_check "bc hyperfine max_rss jq sponge")
   #!/usr/bin/env bash
   set -euo pipefail
   just build {{what}}
