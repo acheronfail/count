@@ -52,19 +52,19 @@ program_header:                   ; Elf64_Phdr
 _start:                 ; argc is at `rsp`, argv is at `rsp + 8`
     mov rdi, [rsp + 16] ; put argv[1] into `rdi` (+ 8 to skip argv[0])
 
-    xor rcx, rcx        ; zero
-    xor rax, rax        ; zero
+    xor ecx, ecx        ; zero
+    xor eax, eax        ; zero
 from_decimal_loop:
     movzx rdx, byte [rdi + rcx]
-    sub rdx, '0'
+    sub edx, '0'
 
-    mov rbx, rax
-    shl rax, 3
-    shl rbx, 1
-    add rax, rbx
+    mov ebx, eax
+    shl eax, 3
+    shl ebx, 1
+    add eax, ebx
 
-    add rax, rdx
-    inc rcx
+    add eax, edx
+    inc ecx
     cmp byte [rdi + rcx], 0
     jne from_decimal_loop
 
