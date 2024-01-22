@@ -27,12 +27,12 @@ RUN apt-get install -y swi-prolog              && apt-get clean
 RUN apt-get install -y tcl                     && apt-get clean
 RUN apt-get install -y valac                   && apt-get clean
 
-RUN wget https://packages.microsoft.com/config/ubuntu/23.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+RUN curl -fSL https://packages.microsoft.com/config/ubuntu/23.04/packages-microsoft-prod.deb > packages-microsoft-prod.deb \
   && dpkg -i packages-microsoft-prod.deb \
   && rm packages-microsoft-prod.deb \
-  && apt-get update
-
-RUN apt-get install -y dotnet-sdk-8.0          && apt-get clean
+  && apt-get update \
+  && apt-get install -y dotnet-sdk-8.0 \
+  && apt-get clean
 
 RUN curl -fSL https://deb.nodesource.com/setup_lts.x | bash - \
   && apt-get install -y nodejs && apt-get clean \
