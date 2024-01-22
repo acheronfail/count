@@ -22,3 +22,7 @@ rss.txt
 GPATH
 GRTAGS
 GTAGS
+bin/
+obj/
+out/
+*.csproj
