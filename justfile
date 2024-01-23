@@ -322,7 +322,7 @@ build-csharp: (_check "mcs mono") && (_size "count.exe") (_sizet "bytecode")
   mcs -o+ ./count.cs
   echo 'mono ./count.exe {{i}}' > CMD
 
-build-csharp-native: (_check "dotnet") && (_size "count")
+build-csharp-native: (_check "dotnet") && (_size "./out/count")
   dotnet --version > VERSION
   echo '<Project Sdk="Microsoft.NET.Sdk"> \
     <PropertyGroup> \
