@@ -323,21 +323,23 @@ build-csharp: (_check "mcs mono") && (_size "count.exe") (_sizet "bytecode")
   echo 'mono ./count.exe {{i}}' > CMD
 
 build-csharp-native: (_check "dotnet") && (_size "./out/count")
+  #!/usr/bin/env bash
   dotnet --version > VERSION
-  echo '<Project Sdk="Microsoft.NET.Sdk"> \
-    <PropertyGroup> \
-      <OutputType>Exe</OutputType> \
-      <TargetFramework>net6.0</TargetFramework> \
-      <PublishSingleFile>true</PublishSingleFile> \
-      <EnableDefaultCompileItems>false</EnableDefaultCompileItems> \
-      <SelfContained>true</SelfContained> \
-      <RuntimeIdentifier>linux-x64</RuntimeIdentifier> \
-    </PropertyGroup> \
-    <ItemGroup> \
-      <Compile Include="count.cs" /> \
-    </ItemGroup> \
+  echo '<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+      <OutputType>Exe</OutputType>
+      <TargetFramework>net6.0</TargetFramework>
+      <PublishSingleFile>true</PublishSingleFile>
+      <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+      <SelfContained>true</SelfContained>
+      <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+      <OptimizationPreference>Speed</OptimizationPreference>
+    </PropertyGroup>
+    <ItemGroup>
+      <Compile Include="count.cs" />
+    </ItemGroup>
   </Project>' > count.csproj
-  DOTNET_CLI_TELEMETRY_OPTOUT="true" dotnet publish -c Release -o out count.csproj
+  DOTNET_CLI_TELEMETRY_OPTOUT="true" dotnet publish --no-restore -c Release -o out count.csproj
   echo './out/count {{i}}' > CMD
 
 build-ocaml: (_check "ocaml")
