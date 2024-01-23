@@ -339,7 +339,7 @@ build-csharp-native: (_check "dotnet") && (_size "./out/count")
       <Compile Include="count.cs" />
     </ItemGroup>
   </Project>' > count.csproj
-  DOTNET_CLI_TELEMETRY_OPTOUT="true" dotnet publish --no-restore -c Release -o out count.csproj
+  DOTNET_CLI_TELEMETRY_OPTOUT="true" dotnet publish -c Release -o out count.csproj
   echo './out/count {{i}}' > CMD
 
 build-ocaml: (_check "ocaml")
