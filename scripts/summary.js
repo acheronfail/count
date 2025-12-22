@@ -109,11 +109,11 @@ ${markdownTable(
 
 ${markdownTable(
   [
-    ['name', 'estimated cycles'],
+    ['name', 'cycles', 'instructions'],
     ...results
       .slice()
       .sort((a, b) => a.cycles - b.cycles)
-      .map(({ name, cycles }) => [name, cycles]),
+      .map(({ name, cycles, instructions }) => [name, cycles, instructions]),
   ],
   {
     align: ['l', 'r', 'l'],
