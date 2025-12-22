@@ -56,7 +56,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: acheronfail/count
-      options: --privileged
     steps:
       - name: Checkout
         uses: actions/checkout@v3
