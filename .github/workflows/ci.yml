@@ -72,6 +72,7 @@ jobs:
       # report
       - uses: actions/upload-artifact@v4
         with:
+          name: ${{ env.WHAT }}
           path: 'results/${{ env.WHAT }}.json'
 
   report:
@@ -86,7 +87,7 @@ jobs:
       - name: Download Results
         uses: actions/download-artifact@v3
         with:
-          path: .
+          path: artifact
       - run: sudo apt-get update && sudo apt-get install -y nodejs
       - name: Generate Summary
         run: |
