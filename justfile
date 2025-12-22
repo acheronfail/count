@@ -100,7 +100,9 @@ measure what: (_check "bc hyperfine max_rss jq sponge")
   max_rss -ro STATS -- $(cat CMD)
   jq '. += {"max_rss": '$(cat STATS)'}' "$out" | sponge "$out"
 
-  valgrind --tool=callgrind --callgrind-out-file=callgrind.txt $(cat CMD)
+  cycle_cmd="$(cat CMD)"
+  cycle_cmd="${cycle_cmd/{{i}}/100000}"
+  valgrind --tool=callgrind --callgrind-out-file=callgrind.txt $cycle_cmd
   grep "summary:" callgrind.txt | awk '{print $2}' > CYCLES
   jq '. += {"cycles": '$(cat CYCLES)'}' "$out" | sponge "$out"
 

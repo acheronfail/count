@@ -121,7 +121,7 @@ ${markdownTable(
 )}
 
 Note that cycles are counted with valgrind (using callgrind) and are only estimates of the actual CPU cycles used.
-
+Called with \`100000\` as input.
 
 ${markdownTable(
   [
