@@ -5,6 +5,7 @@ results/*.json
 *.beam
 *.tasty
 *.class
+*.jar
 *.json
 *.o
 *.exe

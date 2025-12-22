@@ -39,7 +39,7 @@ _all:
   just -l | grep -v 'build-all' | grep 'build-' | cut -d'-' -f2- | xargs
 
 build what:
-  rm -f CMD VERSION STATS SIZE
+  rm -f CMD VERSION STATS SIZE CYCLES
   just build-{{what}}
 
 build-all:
@@ -142,7 +142,7 @@ test what:
     cmd="$(cat CMD)"
     cmd="${cmd/{{i}}/"$input"}"
     echo -n "test: '"$cmd"'"
-    actual="$($cmd 2>&1 | grep -v '^%' | xargs)"
+    actual="$($cmd 2>/dev/null | grep -v '^%' | xargs)"
     if [[ "$actual" != "$expect" ]]; then
       echo " (fail)"
       echo "fail, sent '${input}' and expected '${expect}' but got '${actual}'"

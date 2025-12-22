@@ -1,10 +1,11 @@
-FROM ubuntu:23.04
+FROM ubuntu:25.04
 
 ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
 
 RUN apt-get update
-RUN apt-get install -y bc build-essential curl gdb lldb git jq moreutils tar \
-  unzip wget xz-utils valgrind                 && apt-get clean
+RUN apt-get install -y autoconf automake bc bison build-essential curl flex \
+gawk gdb git jq libffi-dev libsigsegv-dev libtool lldb moreutils pkg-config \
+tar texinfo unzip valgrind wget xz-utils zip   && apt-get clean
 RUN apt-get install -y clang                   && apt-get clean
 RUN apt-get install -y default-jdk default-jre && apt-get clean
 RUN apt-get install -y erlang                  && apt-get clean
@@ -12,7 +13,6 @@ RUN apt-get install -y fp-compiler             && apt-get clean
 RUN apt-get install -y ghc                     && apt-get clean
 RUN apt-get install -y gforth                  && apt-get clean
 RUN apt-get install -y gfortran                && apt-get clean
-RUN apt-get install -y gnu-smalltalk           && apt-get clean
 RUN apt-get install -y gnucobol3               && apt-get clean
 RUN apt-get install -y golang                  && apt-get clean
 RUN apt-get install -y kotlin                  && apt-get clean
@@ -27,11 +27,20 @@ RUN apt-get install -y swi-prolog              && apt-get clean
 RUN apt-get install -y tcl                     && apt-get clean
 RUN apt-get install -y valac                   && apt-get clean
 
-RUN curl -fSL https://packages.microsoft.com/config/ubuntu/23.04/packages-microsoft-prod.deb > packages-microsoft-prod.deb \
+# smalltalk no longer included in ubuntu repos
+RUN git clone https://github.com/gnu-smalltalk/smalltalk.git /tmp/smalltalk \
+  && cd /tmp/smalltalk \
+  && autoreconf -vi \
+  && ./configure CFLAGS="-O2 -g -std=gnu89" \
+  && make \
+  && make install \
+  && rm -rf /tmp/smalltalk
+
+RUN curl -fSL https://packages.microsoft.com/config/ubuntu/25.04/packages-microsoft-prod.deb > packages-microsoft-prod.deb \
   && dpkg -i packages-microsoft-prod.deb \
   && rm packages-microsoft-prod.deb \
   && apt-get update \
-  && apt-get install -y dotnet-sdk-8.0 \
+  && apt-get install -y dotnet-sdk-10.0 \
   && apt-get clean
 
 RUN curl -fSL https://deb.nodesource.com/setup_lts.x | bash - \
