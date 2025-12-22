@@ -70,7 +70,7 @@ jobs:
       - run: just test    ${{ env.WHAT }}
       - run: just measure ${{ env.WHAT }}
       # report
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           path: 'results/${{ env.WHAT }}.json'
 
