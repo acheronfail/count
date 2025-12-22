@@ -100,7 +100,7 @@ measure what: (_check "bc hyperfine max_rss jq sponge")
   max_rss -ro STATS -- $(cat CMD)
   jq '. += {"max_rss": '$(cat STATS)'}' "$out" | sponge "$out"
 
-  if ! ${CI:-}; then
+  if [ -z ${CI:-} ]; then
     perf_out=$(perf stat -x, -e cycles,instructions $(cat CMD) 2>&1 >/dev/null)
     echo "$perf_out" | awk -F, '$3~/^cycles/{print $1}' > CYCLES
     echo "$perf_out" | awk -F, '$3~/^instructions/{print $1}' > INSTRUCTIONS
