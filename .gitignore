@@ -9,6 +9,7 @@ results/*.json
 *.o
 *.exe
 *.hi
+*.txt
 count
 java/
 kotlin/
@@ -18,6 +19,7 @@ CMD
 VERSION
 STATS
 SIZE
+CYCLES
 rss.txt
 GPATH
 GRTAGS

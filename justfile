@@ -100,6 +100,10 @@ measure what: (_check "bc hyperfine max_rss jq sponge")
   max_rss -ro STATS -- $(cat CMD)
   jq '. += {"max_rss": '$(cat STATS)'}' "$out" | sponge "$out"
 
+  valgrind --tool=callgrind --callgrind-out-file=callgrind.txt $(cat CMD)
+  grep "summary:" callgrind.txt | awk '{print $2}' > CYCLES
+  jq '. += {"cycles": '$(cat CYCLES)'}' "$out" | sponge "$out"
+
 measure-all:
   #!/usr/bin/env bash
   set -exuo pipefail

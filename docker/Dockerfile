@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
 
 RUN apt-get update
 RUN apt-get install -y bc build-essential curl gdb lldb git jq moreutils tar \
-  unzip wget xz-utils                          && apt-get clean
+  unzip wget xz-utils valgrind                 && apt-get clean
 RUN apt-get install -y clang                   && apt-get clean
 RUN apt-get install -y default-jdk default-jre && apt-get clean
 RUN apt-get install -y erlang                  && apt-get clean

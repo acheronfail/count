@@ -109,6 +109,22 @@ ${markdownTable(
 
 ${markdownTable(
   [
+    ['name', 'estimated cycles'],
+    ...results
+      .slice()
+      .sort((a, b) => a.cycles - b.cycles)
+      .map(({ name, cycles }) => [name, cycles]),
+  ],
+  {
+    align: ['l', 'r', 'l'],
+  }
+)}
+
+Note that cycles are counted with valgrind (using callgrind) and are only estimates of the actual CPU cycles used.
+
+
+${markdownTable(
+  [
     ['name', 'command', 'version'],
     ...results
       .slice()
