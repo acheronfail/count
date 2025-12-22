@@ -85,7 +85,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download Results
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifact
       - run: sudo apt-get update && sudo apt-get install -y nodejs
