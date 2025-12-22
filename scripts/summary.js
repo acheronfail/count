@@ -120,8 +120,7 @@ ${markdownTable(
   }
 )}
 
-Note that cycles are counted with valgrind (using callgrind) and are only estimates of the actual CPU cycles used.
-Called with \`100000\` as input.
+Note that cycles are counted with \`perf\` and are only estimates of the actual CPU cycles used, as this can vary.
 
 ${markdownTable(
   [

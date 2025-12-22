@@ -39,7 +39,7 @@ _all:
   just -l | grep -v 'build-all' | grep 'build-' | cut -d'-' -f2- | xargs
 
 build what:
-  rm -f CMD VERSION STATS SIZE CYCLES
+  rm -f CMD VERSION STATS SIZE CYCLES INSTRUCTIONS
   just build-{{what}}
 
 build-all:
@@ -100,11 +100,10 @@ measure what: (_check "bc hyperfine max_rss jq sponge")
   max_rss -ro STATS -- $(cat CMD)
   jq '. += {"max_rss": '$(cat STATS)'}' "$out" | sponge "$out"
 
-  cycle_cmd="$(cat CMD)"
-  cycle_cmd="${cycle_cmd/{{i}}/100000}"
-  valgrind --tool=callgrind --callgrind-out-file=callgrind.txt $cycle_cmd
-  grep "summary:" callgrind.txt | awk '{print $2}' > CYCLES
-  jq '. += {"cycles": '$(cat CYCLES)'}' "$out" | sponge "$out"
+  perf_out=$(perf stat -x, -e cycles,instructions $(cat CMD) 2>&1 >/dev/null)
+  echo "$perf_out" | awk -F, '$3~/^cycles/{print $1}' > CYCLES
+  echo "$perf_out" | awk -F, '$3~/^instructions/{print $1}' > INSTRUCTIONS
+  jq '. += {"cycles": '$(cat CYCLES)',"instructions": '$(cat INSTRUCTIONS)'}' "$out" | sponge "$out"
 
 measure-all:
   #!/usr/bin/env bash

@@ -4,8 +4,8 @@ ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/London"
 
 RUN apt-get update
 RUN apt-get install -y autoconf automake bc bison build-essential curl flex \
-gawk gdb git jq libffi-dev libsigsegv-dev libtool lldb moreutils pkg-config \
-tar texinfo unzip valgrind wget xz-utils zip   && apt-get clean
+gawk gdb git jq libffi-dev libsigsegv-dev libtool linux-perf lldb moreutils \
+pkg-config tar texinfo unzip wget xz-utils zip && apt-get clean
 RUN apt-get install -y clang                   && apt-get clean
 RUN apt-get install -y default-jdk default-jre && apt-get clean
 RUN apt-get install -y erlang                  && apt-get clean
