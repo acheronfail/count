@@ -14,7 +14,7 @@ tarball_sig_url="${tarball_url}.sig"
 tarball="swift.tar.gz"
 tarball_sig="swift.tar.gz.sig"
 
-wget -q -O - https://swift.org/keys/all-keys.asc | gpg --import -
+wget --compression=auto -q -O - https://swift.org/keys/all-keys.asc | gpg --import -
 
 curl -fSL "$tarball_url" > "$tarball"
 curl -fSL "$tarball_sig_url" > "$tarball_sig"
