@@ -118,7 +118,7 @@ measure-all:
     just measure "$lang";
   done
 
-  cd scripts && npm start
+  just summary
 
 summary:
   cd scripts && npm start -- --results ../results
