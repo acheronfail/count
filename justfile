@@ -106,7 +106,7 @@ measure what: (_check "bc hyperfine max_rss jq sponge")
     echo "$perf_out" | awk -F, '$3~/^instructions/{print $1}' > INSTRUCTIONS
     jq '. += {"cycles": '$(cat CYCLES)',"instructions": '$(cat INSTRUCTIONS)'}' "$out" | sponge "$out"
   else
-    jq '. += {"cycles": null,"instructions": null}' "$out" | sponge "$out"
+    jq '. += {"cycles": "unsupported in ci","instructions": "unsupported in ci"}' "$out" | sponge "$out"
   fi
 
 measure-all:
