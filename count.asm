@@ -7,6 +7,7 @@
 ; - https://www.muppetlabs.com/~breadbox/software/tiny/teensy.html
 
 BITS 64
+DEFAULT REL ; Use RIP-relative addressing by default which is faster and smaller
 
 ; Needs to be page aligned - there is some historical reasons why it's usually
 ; set to 0x08048000 but it's not required. From my testing 0x10000 is the lowest
@@ -82,7 +83,7 @@ print:
 to_decimal_loop:
     xor edx, edx         ; `edx` must be zeroed (`edx` and `eax` are combined for 64bit division)
     div dword [ten]      ; divide by 10
-    add edx, '0'         ; remainer in `edx`, convert it to ascii
+    add edx, '0'         ; remainder in `edx`, convert it to ascii
     dec rsi              ; move to the previous char in the buffer
     mov [rsi], dl        ; store the ascii character
     test eax, eax        ; quotient in `eax`, test if 0
