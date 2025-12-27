@@ -116,7 +116,7 @@ ${markdownTable(
       .map(({ name, cycles, instructions }) => [name, cycles, instructions]),
   ],
   {
-    align: ['l', 'r', 'l'],
+    align: ['l', 'r', 'r'],
   }
 )}
 
