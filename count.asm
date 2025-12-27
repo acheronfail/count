@@ -9,7 +9,7 @@
 BITS 64
 DEFAULT REL ; Use RIP-relative addressing by default which is faster and smaller
 
-; Needs to be page aligned - there is some historical reasons why it's usually
+; Needs to be page aligned - there are some historical reasons why it's usually
 ; set to 0x08048000 but it's not required. From my testing 0x10000 is the lowest
 ; value I can set it to without the program segfaulting.
     org     0x10000
